@@ -246,7 +246,7 @@ update_meow() {
     if [[ -z "$latest" ]]; then
         log_error "Unable to check for updates. Check network connection."
         echo -e "${YELLOW}Tip:${NC} Check if you can access GitHub (https://github.com)"
-            echo -e "${YELLOW}Tip:${NC} Try again with: ${GRAY}meow update${NC}"
+        echo -e "${YELLOW}Tip:${NC} Try again with: ${GRAY}meow update${NC}"
         exit 1
     fi
 
@@ -612,10 +612,10 @@ interactive_main_menu() {
         tty_name=$(tty 2> /dev/null || echo "")
         if [[ -n "$tty_name" ]]; then
             local flag_file
-        local cache_dir="$HOME/.cache/meow"
-        ensure_user_dir "$cache_dir"
-        flag_file="$cache_dir/intro_$(echo "$tty_name" | LC_ALL=C tr -c '[:alnum:]_' '_')"
-        if [[ ! -f "$flag_file" ]]; then
+            local cache_dir="$HOME/.cache/meow"
+            ensure_user_dir "$cache_dir"
+            flag_file="$cache_dir/intro_$(echo "$tty_name" | LC_ALL=C tr -c '[:alnum:]_' '_')"
+            if [[ ! -f "$flag_file" ]]; then
                 animate_cat_intro
                 ensure_user_file "$flag_file"
             fi
