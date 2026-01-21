@@ -118,7 +118,7 @@ show_update_notification() {
 # UI helpers
 show_brand_banner() {
     cat << EOF
-${GREEN} __  __         __   __  _ ${NC}
+${GREEN} __  __         __   __    ${NC}
 ${GREEN}|  \/  | ___  __| |  | |${NC}
 ${GREEN}| |\/| |/ _ \/  \ |/\| |${NC}
 ${GREEN}| |  | |  __/ (_)\ /\  /${NC}  ${BLUE}https://github.com/tw93/meow${NC}
