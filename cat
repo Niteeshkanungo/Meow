@@ -9,7 +9,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 if [[ -L "${BASH_SOURCE[0]}" ]]; then
     # If this script is a symlink, resolve it to find the real directory
-    REAL_PATH="$(readlink -f "${BASH_SOURCE[0]}" 2> /dev/null || readlink "${BASH_SOURCE[0]}")"
+    REAL_PATH="$(readlink -f "${BASH_SOURCE[0]}" 2>/dev/null || readlink "${BASH_SOURCE[0]}")"
     if [[ -n "$REAL_PATH" ]]; then
         SCRIPT_DIR="$(cd "$(dirname "$REAL_PATH")" && pwd)"
     fi
@@ -118,11 +118,11 @@ show_update_notification() {
 # UI helpers
 show_brand_banner() {
     cat << EOF
-${GREEN} __  __       _      _    _ ${NC}
-${GREEN}|  \/  | ___ | | ___| |  | |${NC}
-${GREEN}| |\/| |/ _ \| |/ _ \ |/\| |${NC}
-${GREEN}| |  | | (_) | |  __/\  /\  /${NC}  ${BLUE}https://github.com/tw93/meow${NC}
-${GREEN}|_|  |_|\___/|_|\___| \/\/ ${NC}  ${GREEN}${MEOW_TAGLINE}${NC}
+${GREEN} __  __         __   __  _ ${NC}
+${GREEN}|  \/  | ___  __| |  | |${NC}
+${GREEN}| |\/| |/ _ \/  \ |/\| |${NC}
+${GREEN}| |  | |  __/ (_)\ /\  /${NC}  ${BLUE}https://github.com/tw93/meow${NC}
+${GREEN}|_|  |_|\___|\___/\/\ / ${NC}  ${GREEN}${MEOW_TAGLINE}${NC}
 
 EOF
 }
