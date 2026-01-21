@@ -50,7 +50,7 @@ setup() {
     stdout_output="$(HOME="$HOME" bash --noprofile --norc -c "source '$PROJECT_ROOT/lib/core/common.sh'; log_info '$message'")"
     [[ "$stdout_output" == *"$message"* ]]
 
-    local log_file="$HOME/.config/mole/mole.log"
+    local log_file="$HOME/.config/meow/mole.log"
     [[ -f "$log_file" ]]
     grep -q "INFO: $message" "$log_file"
 }
@@ -64,20 +64,20 @@ setup() {
     [[ -s "$stderr_file" ]]
     grep -q "$message" "$stderr_file"
 
-    local log_file="$HOME/.config/mole/mole.log"
+    local log_file="$HOME/.config/meow/mole.log"
     [[ -f "$log_file" ]]
     grep -q "ERROR: $message" "$log_file"
 }
 
 @test "rotate_log_once only checks log size once per session" {
-    local log_file="$HOME/.config/mole/mole.log"
+    local log_file="$HOME/.config/meow/mole.log"
     mkdir -p "$(dirname "$log_file")"
     dd if=/dev/zero of="$log_file" bs=1024 count=1100 2> /dev/null
 
     HOME="$HOME" bash --noprofile --norc -c "source '$PROJECT_ROOT/lib/core/common.sh'"
     [[ -f "${log_file}.old" ]]
 
-    result=$(HOME="$HOME" MOLE_LOG_ROTATED=1 bash --noprofile --norc -c "source '$PROJECT_ROOT/lib/core/common.sh'; echo \$MOLE_LOG_ROTATED")
+    result=$(HOME="$HOME" MEOW_LOG_ROTATED=1 bash --noprofile --norc -c "source '$PROJECT_ROOT/lib/core/common.sh'; echo \$MEOW_LOG_ROTATED")
     [[ "$result" == "1" ]]
 }
 
@@ -170,7 +170,7 @@ EOF
 @test "start_inline_spinner and stop_inline_spinner work in non-TTY" {
     result=$(HOME="$HOME" bash --noprofile --norc << 'EOF'
 source "$PROJECT_ROOT/lib/core/common.sh"
-MOLE_SPINNER_PREFIX="  " start_inline_spinner "Testing..."
+MEOW_SPINNER_PREFIX="  " start_inline_spinner "Testing..."
 sleep 0.1
 stop_inline_spinner
 echo "done"
@@ -180,28 +180,28 @@ EOF
 }
 
 @test "read_key maps j/k/h/l to navigation" {
-    run bash -c "export MOLE_BASE_LOADED=1; source '$PROJECT_ROOT/lib/core/ui.sh'; echo -n 'j' | read_key"
+    run bash -c "export MEOW_BASE_LOADED=1; source '$PROJECT_ROOT/lib/core/ui.sh'; echo -n 'j' | read_key"
     [ "$output" = "DOWN" ]
 
-    run bash -c "export MOLE_BASE_LOADED=1; source '$PROJECT_ROOT/lib/core/ui.sh'; echo -n 'k' | read_key"
+    run bash -c "export MEOW_BASE_LOADED=1; source '$PROJECT_ROOT/lib/core/ui.sh'; echo -n 'k' | read_key"
     [ "$output" = "UP" ]
 
-    run bash -c "export MOLE_BASE_LOADED=1; source '$PROJECT_ROOT/lib/core/ui.sh'; echo -n 'h' | read_key"
+    run bash -c "export MEOW_BASE_LOADED=1; source '$PROJECT_ROOT/lib/core/ui.sh'; echo -n 'h' | read_key"
     [ "$output" = "LEFT" ]
 
-    run bash -c "export MOLE_BASE_LOADED=1; source '$PROJECT_ROOT/lib/core/ui.sh'; echo -n 'l' | read_key"
+    run bash -c "export MEOW_BASE_LOADED=1; source '$PROJECT_ROOT/lib/core/ui.sh'; echo -n 'l' | read_key"
     [ "$output" = "RIGHT" ]
 }
 
 @test "read_key maps uppercase J/K/H/L to navigation" {
-    run bash -c "export MOLE_BASE_LOADED=1; source '$PROJECT_ROOT/lib/core/ui.sh'; echo -n 'J' | read_key"
+    run bash -c "export MEOW_BASE_LOADED=1; source '$PROJECT_ROOT/lib/core/ui.sh'; echo -n 'J' | read_key"
     [ "$output" = "DOWN" ]
 
-    run bash -c "export MOLE_BASE_LOADED=1; source '$PROJECT_ROOT/lib/core/ui.sh'; echo -n 'K' | read_key"
+    run bash -c "export MEOW_BASE_LOADED=1; source '$PROJECT_ROOT/lib/core/ui.sh'; echo -n 'K' | read_key"
     [ "$output" = "UP" ]
 }
 
-@test "read_key respects MOLE_READ_KEY_FORCE_CHAR" {
-    run bash -c "export MOLE_BASE_LOADED=1; export MOLE_READ_KEY_FORCE_CHAR=1; source '$PROJECT_ROOT/lib/core/ui.sh'; echo -n 'j' | read_key"
+@test "read_key respects MEOW_READ_KEY_FORCE_CHAR" {
+    run bash -c "export MEOW_BASE_LOADED=1; export MEOW_READ_KEY_FORCE_CHAR=1; source '$PROJECT_ROOT/lib/core/ui.sh'; echo -n 'j' | read_key"
     [ "$output" = "CHAR:j" ]
 }

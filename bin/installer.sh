@@ -6,8 +6,8 @@ set -euo pipefail
 
 # shellcheck disable=SC2154
 # External variables set by menu_paginated.sh and environment
-declare MOLE_SELECTION_RESULT
-declare MOLE_INSTALLER_SCAN_MAX_DEPTH
+declare MEOW_SELECTION_RESULT
+declare MEOW_INSTALLER_SCAN_MAX_DEPTH
 
 export LC_ALL=C
 export LANG=C
@@ -93,7 +93,7 @@ handle_candidate_file() {
 
 scan_installers_in_path() {
     local path="$1"
-    local max_depth="${MOLE_INSTALLER_SCAN_MAX_DEPTH:-$INSTALLER_SCAN_MAX_DEPTH_DEFAULT}"
+    local max_depth="${MEOW_INSTALLER_SCAN_MAX_DEPTH:-$INSTALLER_SCAN_MAX_DEPTH_DEFAULT}"
 
     [[ -d "$path" ]] || return 0
 
@@ -488,11 +488,11 @@ select_installers() {
                 return 1
                 ;;
             "" | $'\n' | $'\r') # Enter - confirm
-                MOLE_SELECTION_RESULT=""
+                MEOW_SELECTION_RESULT=""
                 for ((i = 0; i < total_items; i++)); do
                     if [[ ${selected[i]} == true ]]; then
-                        [[ -n "$MOLE_SELECTION_RESULT" ]] && MOLE_SELECTION_RESULT+=","
-                        MOLE_SELECTION_RESULT+="$i"
+                        [[ -n "$MEOW_SELECTION_RESULT" ]] && MEOW_SELECTION_RESULT+=","
+                        MEOW_SELECTION_RESULT+="$i"
                     fi
                 done
                 restore_terminal
@@ -510,7 +510,7 @@ show_installer_menu() {
 
     echo ""
 
-    MOLE_SELECTION_RESULT=""
+    MEOW_SELECTION_RESULT=""
     if ! select_installers "${DISPLAY_NAMES[@]}"; then
         return 1
     fi
@@ -522,7 +522,7 @@ show_installer_menu() {
 delete_selected_installers() {
     # Parse selection indices
     local -a selected_indices=()
-    [[ -n "$MOLE_SELECTION_RESULT" ]] && IFS=',' read -ra selected_indices <<< "$MOLE_SELECTION_RESULT"
+    [[ -n "$MEOW_SELECTION_RESULT" ]] && IFS=',' read -ra selected_indices <<< "$MEOW_SELECTION_RESULT"
 
     if [[ ${#selected_indices[@]} -eq 0 ]]; then
         return 1
@@ -699,6 +699,6 @@ main() {
 }
 
 # Only run main if not in test mode
-if [[ "${MOLE_TEST_MODE:-0}" != "1" ]]; then
+if [[ "${MEOW_TEST_MODE:-0}" != "1" ]]; then
     main "$@"
 fi

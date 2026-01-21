@@ -5,25 +5,25 @@
 set -euo pipefail
 
 # Prevent multiple sourcing
-if [[ -n "${MOLE_COMMON_LOADED:-}" ]]; then
+if [[ -n "${MEOW_COMMON_LOADED:-}" ]]; then
     return 0
 fi
-readonly MOLE_COMMON_LOADED=1
+readonly MEOW_COMMON_LOADED=1
 
-_MOLE_CORE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+_MEOW_CORE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Load core modules
-source "$_MOLE_CORE_DIR/base.sh"
-source "$_MOLE_CORE_DIR/log.sh"
+source "$_MEOW_CORE_DIR/base.sh"
+source "$_MEOW_CORE_DIR/log.sh"
 
-source "$_MOLE_CORE_DIR/timeout.sh"
-source "$_MOLE_CORE_DIR/file_ops.sh"
-source "$_MOLE_CORE_DIR/ui.sh"
-source "$_MOLE_CORE_DIR/app_protection.sh"
+source "$_MEOW_CORE_DIR/timeout.sh"
+source "$_MEOW_CORE_DIR/file_ops.sh"
+source "$_MEOW_CORE_DIR/ui.sh"
+source "$_MEOW_CORE_DIR/app_protection.sh"
 
 # Load sudo management if available
-if [[ -f "$_MOLE_CORE_DIR/sudo.sh" ]]; then
-    source "$_MOLE_CORE_DIR/sudo.sh"
+if [[ -f "$_MEOW_CORE_DIR/sudo.sh" ]]; then
+    source "$_MEOW_CORE_DIR/sudo.sh"
 fi
 
 # Update via Homebrew
@@ -96,7 +96,7 @@ update_via_homebrew() {
     fi
 
     # Clear update cache (suppress errors if cache doesn't exist or is locked)
-    rm -f "$HOME/.cache/mole/version_check" "$HOME/.cache/mole/update_message" 2> /dev/null || true
+    rm -f "$HOME/.cache/meow/version_check" "$HOME/.cache/meow/update_message" 2> /dev/null || true
 }
 
 # Remove applications from Dock

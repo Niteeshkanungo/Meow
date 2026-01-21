@@ -23,7 +23,7 @@ teardown_file() {
 setup() {
     mkdir -p "$HOME/www"
     mkdir -p "$HOME/dev"
-    mkdir -p "$HOME/.cache/mole"
+    mkdir -p "$HOME/.cache/meow"
 
     rm -rf "${HOME:?}/www"/* "${HOME:?}/dev"/*
 }
@@ -257,7 +257,7 @@ EOF
 set -euo pipefail
 source "$PROJECT_ROOT/lib/clean/project.sh"
 save_discovered_paths "$HOME/Projects"
-grep -q "^~/" "$HOME/.config/mole/purge_paths"
+grep -q "^~/" "$HOME/.config/meow/purge_paths"
 EOF
 
     [ "$status" -eq 0 ]
@@ -566,7 +566,7 @@ EOF
         $timeout_cmd 2 '$PROJECT_ROOT/mole' purge < /dev/null 2>&1 || true
     "
 
-    [ -d "$HOME/.cache/mole" ] || [ -d "${XDG_CACHE_HOME:-$HOME/.cache}/mole" ]
+    [ -d "$HOME/.cache/meow" ] || [ -d "${XDG_CACHE_HOME:-$HOME/.cache}/mole" ]
 }
 
 # .NET bin directory detection tests

@@ -18,7 +18,7 @@ setup() {
 
 @test "bytes_to_human handles large values efficiently" {
     local start end elapsed
-    local limit_ms="${MOLE_PERF_BYTES_TO_HUMAN_LIMIT_MS:-4000}"
+    local limit_ms="${MEOW_PERF_BYTES_TO_HUMAN_LIMIT_MS:-4000}"
 
     bytes_to_human 1073741824 > /dev/null
 
@@ -75,7 +75,7 @@ setup() {
     dd if=/dev/zero of="$test_file" bs=1024 count=100 2> /dev/null
 
     local start end elapsed
-    local limit_ms="${MOLE_PERF_GET_FILE_SIZE_LIMIT_MS:-2000}"
+    local limit_ms="${MEOW_PERF_GET_FILE_SIZE_LIMIT_MS:-2000}"
     start=$(date +%s%N)
     for i in {1..100}; do
         get_file_size "$test_file" > /dev/null
@@ -132,7 +132,7 @@ setup() {
 @test "create_temp_file and cleanup_temp_files work efficiently" {
     local start end elapsed
 
-    declare -a MOLE_TEMP_DIRS=()
+    declare -a MEOW_TEMP_DIRS=()
 
     start=$(date +%s%N)
     for i in {1..50}; do
@@ -144,7 +144,7 @@ setup() {
 
     [ "$elapsed" -lt 1000 ]
 
-    [ "${#MOLE_TEMP_FILES[@]}" -eq 50 ]
+    [ "${#MEOW_TEMP_FILES[@]}" -eq 50 ]
 
     start=$(date +%s%N)
     cleanup_temp_files
@@ -153,7 +153,7 @@ setup() {
     elapsed=$(( (end - start) / 1000000 ))
     [ "$elapsed" -lt 2000 ]
 
-    [ "${#MOLE_TEMP_FILES[@]}" -eq 0 ]
+    [ "${#MEOW_TEMP_FILES[@]}" -eq 0 ]
 }
 
 @test "mktemp_file creates files with correct prefix" {

@@ -25,7 +25,7 @@ DRY_RUN=false
 PROTECT_FINDER_METADATA=false
 IS_M_SERIES=$([[ "$(uname -m)" == "arm64" ]] && echo "true" || echo "false")
 
-EXPORT_LIST_FILE="$HOME/.config/mole/clean-list.txt"
+EXPORT_LIST_FILE="$HOME/.config/meow/clean-list.txt"
 CURRENT_SECTION=""
 readonly PROTECTED_SW_DOMAINS=(
     "capcut.com"
@@ -35,7 +35,7 @@ readonly PROTECTED_SW_DOMAINS=(
 
 declare -a WHITELIST_PATTERNS=()
 WHITELIST_WARNINGS=()
-if [[ -f "$HOME/.config/mole/whitelist" ]]; then
+if [[ -f "$HOME/.config/meow/whitelist" ]]; then
     while IFS= read -r line; do
         # shellcheck disable=SC2295
         line="${line#"${line%%[![:space:]]*}"}"
@@ -86,7 +86,7 @@ if [[ -f "$HOME/.config/mole/whitelist" ]]; then
         fi
         [[ "$duplicate" == "true" ]] && continue
         WHITELIST_PATTERNS+=("$line")
-    done < "$HOME/.config/mole/whitelist"
+    done < "$HOME/.config/meow/whitelist"
 else
     WHITELIST_PATTERNS=("${DEFAULT_WHITELIST_PATTERNS[@]}")
 fi
@@ -349,13 +349,13 @@ safe_clean() {
     local total_count=0
     local skipped_count=0
     local removal_failed_count=0
-    local permission_start=${MOLE_PERMISSION_DENIED_COUNT:-0}
+    local permission_start=${MEOW_PERMISSION_DENIED_COUNT:-0}
 
     local show_scan_feedback=false
     if [[ ${#targets[@]} -gt 20 && -t 1 ]]; then
         show_scan_feedback=true
         stop_section_spinner
-        MOLE_SPINNER_PREFIX="  " start_inline_spinner "Scanning ${#targets[@]} items..."
+        MEOW_SPINNER_PREFIX="  " start_inline_spinner "Scanning ${#targets[@]} items..."
     fi
 
     local -a existing_paths=()
@@ -428,7 +428,7 @@ safe_clean() {
     if [[ ${#existing_paths[@]} -gt 10 ]]; then
         show_spinner=true
         local total_paths=${#existing_paths[@]}
-        if [[ -t 1 ]]; then MOLE_SPINNER_PREFIX="  " start_inline_spinner "Scanning items..."; fi
+        if [[ -t 1 ]]; then MEOW_SPINNER_PREFIX="  " start_inline_spinner "Scanning items..."; fi
     fi
 
     # For larger batches, precompute sizes in parallel for better UX/stat accuracy.
@@ -448,7 +448,7 @@ safe_clean() {
         # Heuristic: mostly files -> sequential stat is faster than subshells.
         if [[ $dir_count -lt 5 && ${#existing_paths[@]} -gt 20 ]]; then
             if [[ -t 1 && "$show_spinner" == "false" ]]; then
-                MOLE_SPINNER_PREFIX="  " start_inline_spinner "Scanning items..."
+                MEOW_SPINNER_PREFIX="  " start_inline_spinner "Scanning items..."
                 show_spinner=true
             fi
 
@@ -497,7 +497,7 @@ safe_clean() {
                     pids+=($!)
                     ((idx++))
 
-                    if ((${#pids[@]} >= MOLE_MAX_PARALLEL_JOBS)); then
+                    if ((${#pids[@]} >= MEOW_MAX_PARALLEL_JOBS)); then
                         wait "${pids[0]}" 2> /dev/null || true
                         pids=("${pids[@]:1}")
                         ((completed++))
@@ -598,7 +598,7 @@ safe_clean() {
         stop_section_spinner
     fi
 
-    local permission_end=${MOLE_PERMISSION_DENIED_COUNT:-0}
+    local permission_end=${MEOW_PERMISSION_DENIED_COUNT:-0}
     # Track permission failures in debug output (avoid noisy user warnings).
     if [[ $permission_end -gt $permission_start && $removed_any -eq 0 ]]; then
         debug_log "Permission denied while cleaning: $description"
@@ -712,7 +712,7 @@ start_cleanup() {
 # Mole Cleanup Preview - $(date '+%Y-%m-%d %H:%M:%S')
 #
 # How to protect files:
-# 1. Copy any path below to ~/.config/mole/whitelist
+# 1. Copy any path below to ~/.config/meow/whitelist
 # 2. Run: mo clean --whitelist
 #
 # Example:
@@ -768,7 +768,7 @@ EOF
 perform_cleanup() {
     # Test mode skips expensive scans and returns minimal output.
     local test_mode_enabled=false
-    if [[ "${MOLE_TEST_MODE:-0}" == "1" ]]; then
+    if [[ "${MEOW_TEST_MODE:-0}" == "1" ]]; then
         test_mode_enabled=true
         if [[ "$DRY_RUN" == "true" ]]; then
             echo -e "${YELLOW}Dry Run Mode${NC} - Preview only, no deletions"

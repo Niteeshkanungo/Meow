@@ -1,4 +1,4 @@
-# Mole Security Audit Report
+# Meow Security Audit Report
 
 <div align="center">
 
@@ -14,7 +14,7 @@
 |-----------|---------|
 | Audit Date | January 17, 2026 |
 | Audit Conclusion | **PASSED** |
-| Mole Version | V1.22.0 |
+| Meow Version | V1.22.0 |
 | Audited Branch | `main` (HEAD) |
 | Scope | Shell scripts, Go binaries, Configuration |
 | Methodology | Static analysis, Threat modeling, Code review |
@@ -36,7 +36,7 @@
 
 **Core Principle: "Do No Harm"**
 
-We built Mole on a **Zero Trust** architecture for filesystem operations. Every modification request is treated as dangerous until it passes strict validation.
+We built Meow on a **Zero Trust** architecture for filesystem operations. Every modification request is treated as dangerous until it passes strict validation.
 
 **Guiding Priorities:**
 
@@ -184,7 +184,7 @@ For user-selected app removal:
 
 **LaunchAgent/LaunchDaemon Cleanup During Uninstallation:**
 
-When users uninstall applications via `mo uninstall`, Mole automatically removes associated LaunchAgent and LaunchDaemon plists:
+When users uninstall applications via `mo uninstall`, Meow automatically removes associated LaunchAgent and LaunchDaemon plists:
 
 - Scans `~/Library/LaunchAgents`, `~/Library/LaunchDaemons`, `/Library/LaunchAgents`, `/Library/LaunchDaemons`
 - Matches both exact bundle ID (`com.example.app.plist`) and app name patterns (`*AppName*.plist`)
@@ -233,7 +233,7 @@ run_with_timeout 5 diskutil info "$mount_point" || skip_volume
 
 ### Custom Whitelists
 
-**File:** `~/.config/mole/whitelist`
+**File:** `~/.config/meow/whitelist`
 
 **Format:**
 
@@ -263,7 +263,7 @@ We mandate confirmation for:
 
 ### Test Coverage
 
-Mole uses **BATS (Bash Automated Testing System)** for automated testing.
+Meow uses **BATS (Bash Automated Testing System)** for automated testing.
 
 | Test Category | Coverage | Key Tests |
 |---------------|----------|-----------|
@@ -321,7 +321,7 @@ bats tests/security.bats # Run specific suite
 
 ### System Binaries
 
-Mole relies on standard, SIP-protected macOS system binaries:
+Meow relies on standard, SIP-protected macOS system binaries:
 
 | Binary | Purpose | Fallback |
 |--------|---------|----------|
@@ -351,6 +351,6 @@ The compiled Go binary (`analyze-go`) includes:
 
 ---
 
-**Our Commitment:** This document certifies that Mole implements industry-standard defensive programming practices and strictly adheres to macOS security guidelines. We prioritize system stability and data integrity above all else.
+**Our Commitment:** This document certifies that Meow implements industry-standard defensive programming practices and strictly adheres to macOS security guidelines. We prioritize system stability and data integrity above all else.
 
 *For security concerns or vulnerability reports, please open an issue or contact the maintainers directly.*

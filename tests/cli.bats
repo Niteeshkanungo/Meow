@@ -91,34 +91,34 @@ setup() {
 }
 
 @test "mo clean --debug creates debug log file" {
-    mkdir -p "$HOME/.config/mole"
-    run env HOME="$HOME" TERM="xterm-256color" MOLE_TEST_MODE=1 MO_DEBUG=1 "$PROJECT_ROOT/mole" clean --dry-run
+    mkdir -p "$HOME/.config/meow"
+    run env HOME="$HOME" TERM="xterm-256color" MEOW_TEST_MODE=1 MO_DEBUG=1 "$PROJECT_ROOT/mole" clean --dry-run
     [ "$status" -eq 0 ]
-    MOLE_OUTPUT="$output"
+    MEOW_OUTPUT="$output"
 
-    DEBUG_LOG="$HOME/.config/mole/mole_debug_session.log"
+    DEBUG_LOG="$HOME/.config/meow/mole_debug_session.log"
     [ -f "$DEBUG_LOG" ]
 
     run grep "Mole Debug Session" "$DEBUG_LOG"
     [ "$status" -eq 0 ]
 
-    [[ "$MOLE_OUTPUT" =~ "Debug session log saved to" ]]
+    [[ "$MEOW_OUTPUT" =~ "Debug session log saved to" ]]
 }
 
 @test "mo clean without debug does not show debug log path" {
-    mkdir -p "$HOME/.config/mole"
-    run env HOME="$HOME" TERM="xterm-256color" MOLE_TEST_MODE=1 MO_DEBUG=0 "$PROJECT_ROOT/mole" clean --dry-run
+    mkdir -p "$HOME/.config/meow"
+    run env HOME="$HOME" TERM="xterm-256color" MEOW_TEST_MODE=1 MO_DEBUG=0 "$PROJECT_ROOT/mole" clean --dry-run
     [ "$status" -eq 0 ]
 
     [[ "$output" != *"Debug session log saved to"* ]]
 }
 
 @test "mo clean --debug logs system info" {
-    mkdir -p "$HOME/.config/mole"
-    run env HOME="$HOME" TERM="xterm-256color" MOLE_TEST_MODE=1 MO_DEBUG=1 "$PROJECT_ROOT/mole" clean --dry-run
+    mkdir -p "$HOME/.config/meow"
+    run env HOME="$HOME" TERM="xterm-256color" MEOW_TEST_MODE=1 MO_DEBUG=1 "$PROJECT_ROOT/mole" clean --dry-run
     [ "$status" -eq 0 ]
 
-    DEBUG_LOG="$HOME/.config/mole/mole_debug_session.log"
+    DEBUG_LOG="$HOME/.config/meow/mole_debug_session.log"
 
     run grep "User:" "$DEBUG_LOG"
     [ "$status" -eq 0 ]
@@ -133,7 +133,7 @@ setup() {
 auth       sufficient     pam_opendirectory.so
 EOF
 
-    run env MOLE_PAM_SUDO_FILE="$pam_file" "$PROJECT_ROOT/bin/touchid.sh" status
+    run env MEOW_PAM_SUDO_FILE="$pam_file" "$PROJECT_ROOT/bin/touchid.sh" status
     [ "$status" -eq 0 ]
     [[ "$output" == *"not configured"* ]]
 
@@ -141,7 +141,7 @@ EOF
 auth       sufficient     pam_tid.so
 EOF
 
-    run env MOLE_PAM_SUDO_FILE="$pam_file" "$PROJECT_ROOT/bin/touchid.sh" status
+    run env MEOW_PAM_SUDO_FILE="$pam_file" "$PROJECT_ROOT/bin/touchid.sh" status
     [ "$status" -eq 0 ]
     [[ "$output" == *"enabled"* ]]
 }
@@ -155,7 +155,7 @@ EOF
     fake_bin="$HOME/fake-bin"
     create_fake_utils "$fake_bin"
 
-    run env PATH="$fake_bin:$PATH" MOLE_PAM_SUDO_FILE="$pam_file" "$PROJECT_ROOT/bin/touchid.sh" enable
+    run env PATH="$fake_bin:$PATH" MEOW_PAM_SUDO_FILE="$pam_file" "$PROJECT_ROOT/bin/touchid.sh" enable
     [ "$status" -eq 0 ]
     grep -q "pam_tid.so" "$pam_file"
     [[ -f "${pam_file}.mole-backup" ]]
@@ -171,7 +171,7 @@ EOF
     fake_bin="$HOME/fake-bin-disable"
     create_fake_utils "$fake_bin"
 
-    run env PATH="$fake_bin:$PATH" MOLE_PAM_SUDO_FILE="$pam_file" "$PROJECT_ROOT/bin/touchid.sh" disable
+    run env PATH="$fake_bin:$PATH" MEOW_PAM_SUDO_FILE="$pam_file" "$PROJECT_ROOT/bin/touchid.sh" disable
     [ "$status" -eq 0 ]
     run grep "pam_tid.so" "$pam_file"
     [ "$status" -ne 0 ]

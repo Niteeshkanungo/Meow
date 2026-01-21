@@ -5,10 +5,10 @@
 set -euo pipefail
 
 # Prevent multiple sourcing
-if [[ -n "${MOLE_TIMEOUT_LOADED:-}" ]]; then
+if [[ -n "${MEOW_TIMEOUT_LOADED:-}" ]]; then
     return 0
 fi
-readonly MOLE_TIMEOUT_LOADED=1
+readonly MEOW_TIMEOUT_LOADED=1
 
 # ============================================================================
 # Timeout Command Initialization

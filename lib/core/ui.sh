@@ -4,13 +4,13 @@
 
 set -euo pipefail
 
-if [[ -n "${MOLE_UI_LOADED:-}" ]]; then
+if [[ -n "${MEOW_UI_LOADED:-}" ]]; then
     return 0
 fi
-readonly MOLE_UI_LOADED=1
+readonly MEOW_UI_LOADED=1
 
-_MOLE_CORE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-[[ -z "${MOLE_BASE_LOADED:-}" ]] && source "$_MOLE_CORE_DIR/base.sh"
+_MEOW_CORE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+[[ -z "${MEOW_BASE_LOADED:-}" ]] && source "$_MEOW_CORE_DIR/base.sh"
 
 # Cursor control
 clear_screen() { printf '\033[2J\033[H'; }
@@ -162,7 +162,7 @@ read_key() {
         return 0
     }
 
-    if [[ "${MOLE_READ_KEY_FORCE_CHAR:-}" == "1" ]]; then
+    if [[ "${MEOW_READ_KEY_FORCE_CHAR:-}" == "1" ]]; then
         [[ -z "$key" ]] && {
             echo "ENTER"
             return 0
@@ -306,7 +306,7 @@ start_inline_spinner() {
             while [[ ! -f "$stop_file" ]]; do
                 local c="${chars:$((i % ${#chars})):1}"
                 # Output to stderr to avoid interfering with stdout
-                printf "\r${MOLE_SPINNER_PREFIX:-}${BLUE}%s${NC} %s" "$c" "$message" >&2 || break
+                printf "\r${MEOW_SPINNER_PREFIX:-}${BLUE}%s${NC} %s" "$c" "$message" >&2 || break
                 ((i++))
                 sleep 0.05
             done
@@ -360,8 +360,8 @@ with_spinner() {
     local timeout=180
     start_inline_spinner "$msg"
     local exit_code=0
-    if [[ -n "${MOLE_TIMEOUT_BIN:-}" ]]; then
-        "$MOLE_TIMEOUT_BIN" "$timeout" "$@" > /dev/null 2>&1 || exit_code=$?
+    if [[ -n "${MEOW_TIMEOUT_BIN:-}" ]]; then
+        "$MEOW_TIMEOUT_BIN" "$timeout" "$@" > /dev/null 2>&1 || exit_code=$?
     else "$@" > /dev/null 2>&1 || exit_code=$?; fi
     stop_inline_spinner "$msg"
     return $exit_code
@@ -416,10 +416,10 @@ format_last_used_summary() {
 # Returns 0 if FDA is granted, 1 if denied, 2 if unknown
 has_full_disk_access() {
     # Cache the result to avoid repeated checks
-    if [[ -n "${MOLE_HAS_FDA:-}" ]]; then
-        if [[ "$MOLE_HAS_FDA" == "1" ]]; then
+    if [[ -n "${MEOW_HAS_FDA:-}" ]]; then
+        if [[ "$MEOW_HAS_FDA" == "1" ]]; then
             return 0
-        elif [[ "$MOLE_HAS_FDA" == "unknown" ]]; then
+        elif [[ "$MEOW_HAS_FDA" == "unknown" ]]; then
             return 2
         else
             return 1
@@ -456,15 +456,15 @@ has_full_disk_access() {
     # 3. tested_count > 0 && accessible_count = 0: No FDA → no
     if [[ $tested_count -eq 0 ]]; then
         # Can't determine - test paths don't exist, treat as unknown
-        export MOLE_HAS_FDA="unknown"
+        export MEOW_HAS_FDA="unknown"
         return 2
     elif [[ $accessible_count -gt 0 ]]; then
         # At least one path is accessible → has FDA
-        export MOLE_HAS_FDA=1
+        export MEOW_HAS_FDA=1
         return 0
     else
         # Tested paths exist but not accessible → no FDA
-        export MOLE_HAS_FDA=0
+        export MEOW_HAS_FDA=0
         return 1
     fi
 }

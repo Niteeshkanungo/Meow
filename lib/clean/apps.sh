@@ -10,7 +10,7 @@ clean_ds_store_tree() {
     local total_bytes=0
     local spinner_active="false"
     if [[ -t 1 ]]; then
-        MOLE_SPINNER_PREFIX="  "
+        MEOW_SPINNER_PREFIX="  "
         start_inline_spinner "Cleaning Finder metadata..."
         spinner_active="true"
     fi
@@ -35,7 +35,7 @@ clean_ds_store_tree() {
         if [[ "$DRY_RUN" != "true" ]]; then
             rm -f "$ds_file" 2> /dev/null || true
         fi
-        if [[ $file_count -ge $MOLE_MAX_DS_STORE_FILES ]]; then
+        if [[ $file_count -ge $MEOW_MAX_DS_STORE_FILES ]]; then
             break
         fi
     done < <("${find_cmd[@]}" 2> /dev/null || true)
@@ -62,7 +62,7 @@ clean_ds_store_tree() {
 scan_installed_apps() {
     local installed_bundles="$1"
     # Cache installed app scan briefly to speed repeated runs.
-    local cache_file="$HOME/.cache/mole/installed_apps_cache"
+    local cache_file="$HOME/.cache/meow/installed_apps_cache"
     local cache_age_seconds=300 # 5 minutes
     if [[ -f "$cache_file" ]]; then
         local cache_mtime=$(get_file_mtime "$cache_file")
@@ -287,7 +287,7 @@ clean_orphaned_app_data() {
                 for match in $item_path; do
                     [[ -e "$match" ]] || continue
                     ((iteration_count++))
-                    if [[ $iteration_count -gt $MOLE_MAX_ORPHAN_ITERATIONS ]]; then
+                    if [[ $iteration_count -gt $MEOW_MAX_ORPHAN_ITERATIONS ]]; then
                         break
                     fi
                     local bundle_id=$(basename "$match")
@@ -444,7 +444,7 @@ clean_orphaned_system_services() {
             local filename
             filename=$(basename "$orphan_file")
 
-            if [[ "${MOLE_DRY_RUN:-0}" == "1" ]]; then
+            if [[ "${MEOW_DRY_RUN:-0}" == "1" ]]; then
                 debug_log "[DRY RUN] Would remove orphaned service: $orphan_file"
             else
                 # Unload if it's a LaunchDaemon/LaunchAgent

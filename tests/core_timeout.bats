@@ -178,11 +178,11 @@ setup() {
     [[ "$result" == "loaded" ]]
 }
 
-@test "timeout.sh: sets MOLE_TIMEOUT_LOADED flag" {
+@test "timeout.sh: sets MEOW_TIMEOUT_LOADED flag" {
     result=$(bash -c "
         set -euo pipefail
         source '$PROJECT_ROOT/lib/core/timeout.sh'
-        echo \"\$MOLE_TIMEOUT_LOADED\"
+        echo \"\$MEOW_TIMEOUT_LOADED\"
     ")
     [[ "$result" == "1" ]]
 }

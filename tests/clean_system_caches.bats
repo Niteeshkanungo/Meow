@@ -11,7 +11,7 @@ setup_file() {
     export HOME
 
     mkdir -p "$HOME"
-    mkdir -p "$HOME/.cache/mole"
+    mkdir -p "$HOME/.cache/meow"
     mkdir -p "$HOME/Library/Caches"
     mkdir -p "$HOME/Library/Logs"
 }
@@ -35,18 +35,18 @@ setup() {
     }
     export -f run_with_timeout
 
-    rm -f "$HOME/.cache/mole/permissions_granted"
+    rm -f "$HOME/.cache/meow/permissions_granted"
 }
 
 @test "check_tcc_permissions skips in non-interactive mode" {
     run bash -c "source '$PROJECT_ROOT/lib/core/common.sh'; source '$PROJECT_ROOT/lib/clean/caches.sh'; check_tcc_permissions" < /dev/null
     [ "$status" -eq 0 ]
-    [[ ! -f "$HOME/.cache/mole/permissions_granted" ]]
+    [[ ! -f "$HOME/.cache/meow/permissions_granted" ]]
 }
 
 @test "check_tcc_permissions skips when permissions already granted" {
-    mkdir -p "$HOME/.cache/mole"
-    touch "$HOME/.cache/mole/permissions_granted"
+    mkdir -p "$HOME/.cache/meow"
+    touch "$HOME/.cache/meow/permissions_granted"
 
     run bash -c "source '$PROJECT_ROOT/lib/core/common.sh'; source '$PROJECT_ROOT/lib/clean/caches.sh'; [[ -t 1 ]] || true; check_tcc_permissions"
     [ "$status" -eq 0 ]
@@ -56,7 +56,7 @@ setup() {
 
     [[ -d "$HOME/Library/Caches" ]]
     [[ -d "$HOME/Library/Logs" ]]
-    [[ -d "$HOME/.cache/mole" ]]
+    [[ -d "$HOME/.cache/meow" ]]
 
     run bash -c "source '$PROJECT_ROOT/lib/core/common.sh'; source '$PROJECT_ROOT/lib/clean/caches.sh'; check_tcc_permissions < /dev/null"
     [ "$status" -eq 0 ]

@@ -4,13 +4,13 @@
 
 set -euo pipefail
 
-if [[ -n "${MOLE_APP_PROTECTION_LOADED:-}" ]]; then
+if [[ -n "${MEOW_APP_PROTECTION_LOADED:-}" ]]; then
     return 0
 fi
-readonly MOLE_APP_PROTECTION_LOADED=1
+readonly MEOW_APP_PROTECTION_LOADED=1
 
-_MOLE_CORE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-[[ -z "${MOLE_BASE_LOADED:-}" ]] && source "$_MOLE_CORE_DIR/base.sh"
+_MEOW_CORE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+[[ -z "${MEOW_BASE_LOADED:-}" ]] && source "$_MEOW_CORE_DIR/base.sh"
 
 # Declare WHITELIST_PATTERNS if not already set (used by is_path_whitelisted)
 if ! declare -p WHITELIST_PATTERNS &> /dev/null; then
@@ -493,7 +493,7 @@ should_protect_data() {
 # Check if a path is protected from deletion
 # Centralized logic to protect system settings, control center, and critical apps
 #
-# In uninstall mode (MOLE_UNINSTALL_MODE=1), only system-critical components are protected.
+# In uninstall mode (MEOW_UNINSTALL_MODE=1), only system-critical components are protected.
 # Data-protected apps (VPNs, dev tools, etc.) can be uninstalled when user explicitly chooses to.
 #
 # Args: $1 - path to check
@@ -581,7 +581,7 @@ should_protect_path() {
     # 6. Match full path against protected patterns
     # This catches things like /Users/tw93/Library/Caches/Claude when pattern is *Claude*
     # In uninstall mode, only check system-critical bundles (user explicitly chose to uninstall)
-    if [[ "${MOLE_UNINSTALL_MODE:-0}" == "1" ]]; then
+    if [[ "${MEOW_UNINSTALL_MODE:-0}" == "1" ]]; then
         # Uninstall mode: only protect system-critical components
         for pattern in "${SYSTEM_CRITICAL_BUNDLES[@]}"; do
             if bundle_matches_pattern "$path" "$pattern"; then
@@ -599,7 +599,7 @@ should_protect_path() {
 
     # 7. Check if the filename itself matches any protected patterns
     # Skip in uninstall mode - user explicitly chose to remove this app
-    if [[ "${MOLE_UNINSTALL_MODE:-0}" != "1" ]]; then
+    if [[ "${MEOW_UNINSTALL_MODE:-0}" != "1" ]]; then
         local filename
         filename=$(basename "$path")
         if should_protect_data "$filename"; then

@@ -47,8 +47,8 @@ EOF
 set -euo pipefail
 source "$PROJECT_ROOT/lib/core/common.sh"
 source "$PROJECT_ROOT/lib/clean/apps.sh"
-mkdir -p "$HOME/.cache/mole"
-echo "com.example.App" > "$HOME/.cache/mole/installed_apps_cache"
+mkdir -p "$HOME/.cache/meow"
+echo "com.example.App" > "$HOME/.cache/meow/installed_apps_cache"
 get_file_mtime() { date +%s; }
 debug_log() { :; }
 scan_installed_apps "$HOME/installed.txt"

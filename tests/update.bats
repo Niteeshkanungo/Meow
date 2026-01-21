@@ -13,7 +13,7 @@ setup_file() {
     HOME="$(mktemp -d "${BATS_TEST_DIRNAME}/tmp-update-manager.XXXXXX")"
     export HOME
 
-    mkdir -p "${HOME}/.cache/mole"
+    mkdir -p "${HOME}/.cache/meow"
 }
 
 teardown_file() {
@@ -29,7 +29,7 @@ setup() {
     BREW_CASK_OUTDATED_COUNT=0
     APPSTORE_UPDATE_COUNT=0
     MACOS_UPDATE_AVAILABLE=false
-    MOLE_UPDATE_AVAILABLE=false
+    MEOW_UPDATE_AVAILABLE=false
 
     export MOCK_BIN_DIR="$BATS_TMPDIR/mole-mocks-$$"
     mkdir -p "$MOCK_BIN_DIR"
@@ -53,7 +53,7 @@ source "$PROJECT_ROOT/lib/manage/update.sh"
 BREW_OUTDATED_COUNT=0
 APPSTORE_UPDATE_COUNT=0
 MACOS_UPDATE_AVAILABLE=false
-MOLE_UPDATE_AVAILABLE=false
+MEOW_UPDATE_AVAILABLE=false
 ask_for_updates
 EOF
 
@@ -70,7 +70,7 @@ BREW_FORMULA_OUTDATED_COUNT=3
 BREW_CASK_OUTDATED_COUNT=2
 APPSTORE_UPDATE_COUNT=1
 MACOS_UPDATE_AVAILABLE=true
-MOLE_UPDATE_AVAILABLE=true
+MEOW_UPDATE_AVAILABLE=true
 
 read_key() { echo "ESC"; return 0; }
 
@@ -91,7 +91,7 @@ source "$PROJECT_ROOT/lib/core/common.sh"
 source "$PROJECT_ROOT/lib/manage/update.sh"
 BREW_OUTDATED_COUNT=2
 BREW_FORMULA_OUTDATED_COUNT=2
-MOLE_UPDATE_AVAILABLE=true
+MEOW_UPDATE_AVAILABLE=true
 read_key() { echo "ENTER"; return 0; }
 ask_for_updates
 EOF
@@ -125,7 +125,7 @@ source "$PROJECT_ROOT/lib/manage/update.sh"
 
 BREW_FORMULA_OUTDATED_COUNT=1
 BREW_CASK_OUTDATED_COUNT=0
-MOLE_UPDATE_AVAILABLE=true
+MEOW_UPDATE_AVAILABLE=true
 
 FAKE_DIR="$HOME/fake-script-dir"
 mkdir -p "$FAKE_DIR/lib/manage"
@@ -140,7 +140,7 @@ brew_has_outdated() { return 0; }
 start_inline_spinner() { :; }
 stop_inline_spinner() { :; }
 reset_brew_cache() { echo "BREW_CACHE_RESET"; }
-reset_mole_cache() { echo "MOLE_CACHE_RESET"; }
+reset_mole_cache() { echo "MEOW_CACHE_RESET"; }
 has_sudo_session() { return 1; }
 ensure_sudo_session() { echo "ensure_sudo_session_called"; return 1; }
 
@@ -161,23 +161,23 @@ EOF
     [ "$status" -eq 0 ]
     [[ "$output" == *"Updating Mole"* ]]
     [[ "$output" == *"Mole updated"* ]]
-    [[ "$output" == *"MOLE_CACHE_RESET"* ]]
+    [[ "$output" == *"MEOW_CACHE_RESET"* ]]
     [[ "$output" == *"All updates completed"* ]]
 }
 
 @test "update_via_homebrew reports already on latest version" {
     run env HOME="$HOME" PROJECT_ROOT="$PROJECT_ROOT" bash --noprofile --norc << 'EOF'
 set -euo pipefail
-MOLE_TEST_BREW_UPDATE_OUTPUT="Updated 0 formulae"
-MOLE_TEST_BREW_UPGRADE_OUTPUT="Warning: mole 1.7.9 already installed"
-MOLE_TEST_BREW_LIST_OUTPUT="mole 1.7.9"
+MEOW_TEST_BREW_UPDATE_OUTPUT="Updated 0 formulae"
+MEOW_TEST_BREW_UPGRADE_OUTPUT="Warning: mole 1.7.9 already installed"
+MEOW_TEST_BREW_LIST_OUTPUT="mole 1.7.9"
 start_inline_spinner() { :; }
 stop_inline_spinner() { :; }
 brew() {
   case "$1" in
-    update) echo "$MOLE_TEST_BREW_UPDATE_OUTPUT";;
-    upgrade) echo "$MOLE_TEST_BREW_UPGRADE_OUTPUT";;
-    list) if [[ "$2" == "--versions" ]]; then echo "$MOLE_TEST_BREW_LIST_OUTPUT"; fi ;;
+    update) echo "$MEOW_TEST_BREW_UPDATE_OUTPUT";;
+    upgrade) echo "$MEOW_TEST_BREW_UPGRADE_OUTPUT";;
+    list) if [[ "$2" == "--versions" ]]; then echo "$MEOW_TEST_BREW_LIST_OUTPUT"; fi ;;
   esac
 }
 export -f brew start_inline_spinner stop_inline_spinner

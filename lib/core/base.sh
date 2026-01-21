@@ -5,10 +5,10 @@
 set -euo pipefail
 
 # Prevent multiple sourcing
-if [[ -n "${MOLE_BASE_LOADED:-}" ]]; then
+if [[ -n "${MEOW_BASE_LOADED:-}" ]]; then
     return 0
 fi
-readonly MOLE_BASE_LOADED=1
+readonly MEOW_BASE_LOADED=1
 
 # ============================================================================
 # Color Definitions
@@ -43,17 +43,17 @@ readonly ICON_NAV_DOWN="↓"
 # ============================================================================
 # Global Configuration Constants
 # ============================================================================
-readonly MOLE_TEMP_FILE_AGE_DAYS=7       # Temp file retention (days)
-readonly MOLE_ORPHAN_AGE_DAYS=60         # Orphaned data retention (days)
-readonly MOLE_MAX_PARALLEL_JOBS=15       # Parallel job limit
-readonly MOLE_MAIL_DOWNLOADS_MIN_KB=5120 # Mail attachment size threshold
-readonly MOLE_MAIL_AGE_DAYS=30           # Mail attachment retention (days)
-readonly MOLE_LOG_AGE_DAYS=7             # Log retention (days)
-readonly MOLE_CRASH_REPORT_AGE_DAYS=7    # Crash report retention (days)
-readonly MOLE_SAVED_STATE_AGE_DAYS=30    # Saved state retention (days) - increased for safety
-readonly MOLE_TM_BACKUP_SAFE_HOURS=48    # TM backup safety window (hours)
-readonly MOLE_MAX_DS_STORE_FILES=500     # Max .DS_Store files to clean per scan
-readonly MOLE_MAX_ORPHAN_ITERATIONS=100  # Max iterations for orphaned app data scan
+readonly MEOW_TEMP_FILE_AGE_DAYS=7       # Temp file retention (days)
+readonly MEOW_ORPHAN_AGE_DAYS=60         # Orphaned data retention (days)
+readonly MEOW_MAX_PARALLEL_JOBS=15       # Parallel job limit
+readonly MEOW_MAIL_DOWNLOADS_MIN_KB=5120 # Mail attachment size threshold
+readonly MEOW_MAIL_AGE_DAYS=30           # Mail attachment retention (days)
+readonly MEOW_LOG_AGE_DAYS=7             # Log retention (days)
+readonly MEOW_CRASH_REPORT_AGE_DAYS=7    # Crash report retention (days)
+readonly MEOW_SAVED_STATE_AGE_DAYS=30    # Saved state retention (days) - increased for safety
+readonly MEOW_TM_BACKUP_SAFE_HOURS=48    # TM backup safety window (hours)
+readonly MEOW_MAX_DS_STORE_FILES=500     # Max .DS_Store files to clean per scan
+readonly MEOW_MAX_ORPHAN_ITERATIONS=100  # Max iterations for orphaned app data scan
 
 # ============================================================================
 # Whitelist Configuration
@@ -260,8 +260,8 @@ get_user_home() {
 }
 
 get_invoking_user() {
-    if [[ -n "${_MOLE_INVOKING_USER_CACHE:-}" ]]; then
-        echo "$_MOLE_INVOKING_USER_CACHE"
+    if [[ -n "${_MEOW_INVOKING_USER_CACHE:-}" ]]; then
+        echo "$_MEOW_INVOKING_USER_CACHE"
         return 0
     fi
 
@@ -272,7 +272,7 @@ get_invoking_user() {
         user="${USER:-}"
     fi
 
-    export _MOLE_INVOKING_USER_CACHE="$user"
+    export _MEOW_INVOKING_USER_CACHE="$user"
     echo "$user"
 }
 
@@ -458,17 +458,17 @@ get_brand_name() {
     local name="$1"
 
     # Detect if system primary language is Chinese (Cached)
-    if [[ -z "${MOLE_IS_CHINESE_SYSTEM:-}" ]]; then
+    if [[ -z "${MEOW_IS_CHINESE_SYSTEM:-}" ]]; then
         local sys_lang
         sys_lang=$(defaults read -g AppleLanguages 2> /dev/null | grep -o 'zh-Hans\|zh-Hant\|zh' | head -1 || echo "")
         if [[ -n "$sys_lang" ]]; then
-            export MOLE_IS_CHINESE_SYSTEM="true"
+            export MEOW_IS_CHINESE_SYSTEM="true"
         else
-            export MOLE_IS_CHINESE_SYSTEM="false"
+            export MEOW_IS_CHINESE_SYSTEM="false"
         fi
     fi
 
-    local is_chinese="${MOLE_IS_CHINESE_SYSTEM}"
+    local is_chinese="${MEOW_IS_CHINESE_SYSTEM}"
 
     # Return localized names based on system language
     if [[ "$is_chinese" == true ]]; then
@@ -514,8 +514,8 @@ get_brand_name() {
 # ============================================================================
 
 # Tracked temporary files and directories
-declare -a MOLE_TEMP_FILES=()
-declare -a MOLE_TEMP_DIRS=()
+declare -a MEOW_TEMP_FILES=()
+declare -a MEOW_TEMP_DIRS=()
 
 # Create tracked temporary file
 create_temp_file() {
@@ -535,12 +535,12 @@ create_temp_dir() {
 
 # Register existing file for cleanup
 register_temp_file() {
-    MOLE_TEMP_FILES+=("$1")
+    MEOW_TEMP_FILES+=("$1")
 }
 
 # Register existing directory for cleanup
 register_temp_dir() {
-    MOLE_TEMP_DIRS+=("$1")
+    MEOW_TEMP_DIRS+=("$1")
 }
 
 # Create temp file with prefix (for analyze.sh compatibility)
@@ -564,20 +564,20 @@ mktemp_file() {
 cleanup_temp_files() {
     stop_inline_spinner 2> /dev/null || true
     local file
-    if [[ ${#MOLE_TEMP_FILES[@]} -gt 0 ]]; then
-        for file in "${MOLE_TEMP_FILES[@]}"; do
+    if [[ ${#MEOW_TEMP_FILES[@]} -gt 0 ]]; then
+        for file in "${MEOW_TEMP_FILES[@]}"; do
             [[ -f "$file" ]] && rm -f "$file" 2> /dev/null || true
         done
     fi
 
-    if [[ ${#MOLE_TEMP_DIRS[@]} -gt 0 ]]; then
-        for file in "${MOLE_TEMP_DIRS[@]}"; do
+    if [[ ${#MEOW_TEMP_DIRS[@]} -gt 0 ]]; then
+        for file in "${MEOW_TEMP_DIRS[@]}"; do
             [[ -d "$file" ]] && rm -rf "$file" 2> /dev/null || true # SAFE: cleanup_temp_files
         done
     fi
 
-    MOLE_TEMP_FILES=()
-    MOLE_TEMP_DIRS=()
+    MEOW_TEMP_FILES=()
+    MEOW_TEMP_DIRS=()
 }
 
 # ============================================================================
@@ -619,7 +619,7 @@ start_section_spinner() {
     local message="${1:-Scanning...}"
     stop_inline_spinner 2> /dev/null || true
     if [[ -t 1 ]]; then
-        MOLE_SPINNER_PREFIX="  " start_inline_spinner "$message"
+        MEOW_SPINNER_PREFIX="  " start_inline_spinner "$message"
     fi
 }
 
@@ -702,7 +702,7 @@ update_progress_if_needed() {
 # ============================================================================
 
 # Global spinner stack
-declare -a MOLE_SPINNER_STACK=()
+declare -a MEOW_SPINNER_STACK=()
 
 # Push current spinner state onto stack
 # Usage: push_spinner_state
@@ -710,42 +710,42 @@ push_spinner_state() {
     local current_state=""
 
     # Save current spinner PID if running
-    if [[ -n "${MOLE_SPINNER_PID:-}" ]] && kill -0 "$MOLE_SPINNER_PID" 2> /dev/null; then
-        current_state="running:$MOLE_SPINNER_PID"
+    if [[ -n "${MEOW_SPINNER_PID:-}" ]] && kill -0 "$MEOW_SPINNER_PID" 2> /dev/null; then
+        current_state="running:$MEOW_SPINNER_PID"
     else
         current_state="stopped"
     fi
 
-    MOLE_SPINNER_STACK+=("$current_state")
-    debug_log "Pushed spinner state: $current_state (stack depth: ${#MOLE_SPINNER_STACK[@]})"
+    MEOW_SPINNER_STACK+=("$current_state")
+    debug_log "Pushed spinner state: $current_state (stack depth: ${#MEOW_SPINNER_STACK[@]})"
 }
 
 # Pop and restore spinner state from stack
 # Usage: pop_spinner_state
 pop_spinner_state() {
-    if [[ ${#MOLE_SPINNER_STACK[@]} -eq 0 ]]; then
+    if [[ ${#MEOW_SPINNER_STACK[@]} -eq 0 ]]; then
         debug_log "Warning: Attempted to pop from empty spinner stack"
         return 1
     fi
 
     # Stack depth safety check
-    if [[ ${#MOLE_SPINNER_STACK[@]} -gt 10 ]]; then
-        debug_log "Warning: Spinner stack depth excessive (${#MOLE_SPINNER_STACK[@]}), possible leak"
+    if [[ ${#MEOW_SPINNER_STACK[@]} -gt 10 ]]; then
+        debug_log "Warning: Spinner stack depth excessive (${#MEOW_SPINNER_STACK[@]}), possible leak"
     fi
 
-    local last_idx=$((${#MOLE_SPINNER_STACK[@]} - 1))
-    local state="${MOLE_SPINNER_STACK[$last_idx]}"
+    local last_idx=$((${#MEOW_SPINNER_STACK[@]} - 1))
+    local state="${MEOW_SPINNER_STACK[$last_idx]}"
 
     # Remove from stack (Bash 3.2 compatible way)
     # Instead of unset, rebuild array without last element
     local -a new_stack=()
     local i
     for ((i = 0; i < last_idx; i++)); do
-        new_stack+=("${MOLE_SPINNER_STACK[$i]}")
+        new_stack+=("${MEOW_SPINNER_STACK[$i]}")
     done
-    MOLE_SPINNER_STACK=("${new_stack[@]}")
+    MEOW_SPINNER_STACK=("${new_stack[@]}")
 
-    debug_log "Popped spinner state: $state (remaining depth: ${#MOLE_SPINNER_STACK[@]})"
+    debug_log "Popped spinner state: $state (remaining depth: ${#MEOW_SPINNER_STACK[@]})"
 
     # Restore state if needed
     if [[ "$state" == running:* ]]; then

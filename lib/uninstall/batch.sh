@@ -4,7 +4,7 @@ set -euo pipefail
 
 # Ensure common.sh is loaded.
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-[[ -z "${MOLE_COMMON_LOADED:-}" ]] && source "$SCRIPT_DIR/lib/core/common.sh"
+[[ -z "${MEOW_COMMON_LOADED:-}" ]] && source "$SCRIPT_DIR/lib/core/common.sh"
 
 # Load Homebrew cask support (provides get_brew_cask_name, brew_uninstall_cask)
 [[ -f "$SCRIPT_DIR/lib/uninstall/brew.sh" ]] && source "$SCRIPT_DIR/lib/uninstall/brew.sh"
@@ -170,7 +170,7 @@ batch_uninstall_applications() {
     local total_size_freed=0
 
     # Trap to clean up spinner and uninstall mode on interrupt
-    trap 'stop_inline_spinner 2>/dev/null; unset MOLE_UNINSTALL_MODE; echo ""; return 130' INT TERM
+    trap 'stop_inline_spinner 2>/dev/null; unset MEOW_UNINSTALL_MODE; echo ""; return 130' INT TERM
 
     # shellcheck disable=SC2154
     if [[ ${#selected_apps[@]} -eq 0 ]]; then
@@ -362,7 +362,7 @@ batch_uninstall_applications() {
 
     # Enable uninstall mode - allows deletion of data-protected apps (VPNs, dev tools, etc.)
     # that user explicitly chose to uninstall. System-critical components remain protected.
-    export MOLE_UNINSTALL_MODE=1
+    export MEOW_UNINSTALL_MODE=1
 
     # Request sudo if needed.
     if [[ ${#sudo_apps[@]} -gt 0 ]]; then
@@ -640,11 +640,11 @@ batch_uninstall_applications() {
     fi
 
     # Disable uninstall mode
-    unset MOLE_UNINSTALL_MODE
+    unset MEOW_UNINSTALL_MODE
 
     # Invalidate cache if any apps were successfully uninstalled.
     if [[ $success_count -gt 0 ]]; then
-        local cache_file="$HOME/.cache/mole/app_scan_cache"
+        local cache_file="$HOME/.cache/meow/app_scan_cache"
         rm -f "$cache_file" 2> /dev/null || true
     fi
 

@@ -7,29 +7,29 @@ source "$ROOT_DIR/lib/core/common.sh"
 source "$ROOT_DIR/lib/core/commands.sh"
 
 command_names=()
-for entry in "${MOLE_COMMANDS[@]}"; do
+for entry in "${MEOW_COMMANDS[@]}"; do
     command_names+=("${entry%%:*}")
 done
 command_words="${command_names[*]}"
 
 emit_zsh_subcommands() {
-    for entry in "${MOLE_COMMANDS[@]}"; do
+    for entry in "${MEOW_COMMANDS[@]}"; do
         printf "        '%s:%s'\n" "${entry%%:*}" "${entry#*:}"
     done
 }
 
 emit_fish_completions() {
     local cmd="$1"
-    for entry in "${MOLE_COMMANDS[@]}"; do
+    for entry in "${MEOW_COMMANDS[@]}"; do
         local name="${entry%%:*}"
         local desc="${entry#*:}"
-        printf 'complete -c %s -n "__fish_mole_no_subcommand" -a %s -d "%s"\n' "$cmd" "$name" "$desc"
+        printf 'complete -c %s -n "__fish_meow_no_subcommand" -a %s -d "%s"\n' "$cmd" "$name" "$desc"
     done
 
     printf '\n'
-    printf 'complete -c %s -n "not __fish_mole_no_subcommand" -a bash -d "generate bash completion" -n "__fish_see_subcommand_path completion"\n' "$cmd"
-    printf 'complete -c %s -n "not __fish_mole_no_subcommand" -a zsh -d "generate zsh completion" -n "__fish_see_subcommand_path completion"\n' "$cmd"
-    printf 'complete -c %s -n "not __fish_mole_no_subcommand" -a fish -d "generate fish completion" -n "__fish_see_subcommand_path completion"\n' "$cmd"
+    printf 'complete -c %s -n "not __fish_meow_no_subcommand" -a bash -d "generate bash completion" -n "__fish_see_subcommand_path completion"\n' "$cmd"
+    printf 'complete -c %s -n "not __fish_meow_no_subcommand" -a zsh -d "generate zsh completion" -n "__fish_see_subcommand_path completion"\n' "$cmd"
+    printf 'complete -c %s -n "not __fish_meow_no_subcommand" -a fish -d "generate fish completion" -n "__fish_see_subcommand_path completion"\n' "$cmd"
 }
 
 # Auto-install mode when run without arguments
@@ -41,8 +41,8 @@ if [[ $# -eq 0 ]]; then
     fi
 
     completion_name=""
-    if command -v mole > /dev/null 2>&1; then
-        completion_name="mole"
+    if command -v cat > /dev/null 2>&1; then
+        completion_name="cat"
     elif command -v mo > /dev/null 2>&1; then
         completion_name="mo"
     fi
@@ -66,17 +66,17 @@ if [[ $# -eq 0 ]]; then
             ;;
         *)
             log_error "Unsupported shell: $current_shell"
-            echo "  mole completion <bash|zsh|fish>"
+            echo "  cat completion <bash|zsh|fish>"
             exit 1
             ;;
     esac
 
     if [[ -z "$completion_name" ]]; then
-        if [[ -f "$config_file" ]] && grep -Eq "(^# Mole shell completion$|(mole|mo)[[:space:]]+completion)" "$config_file" 2> /dev/null; then
+        if [[ -f "$config_file" ]] && grep -Eq "(^# Meow shell completion$|(cat|mo)[[:space:]]+completion)" "$config_file" 2> /dev/null; then
             original_mode=""
             original_mode="$(stat -f '%Mp%Lp' "$config_file" 2> /dev/null || true)"
             temp_file="$(mktemp)"
-            grep -Ev "(^# Mole shell completion$|(mole|mo)[[:space:]]+completion)" "$config_file" > "$temp_file" || true
+            grep -Ev "(^# Meow shell completion$|(cat|mo)[[:space:]]+completion)" "$config_file" > "$temp_file" || true
             mv "$temp_file" "$config_file"
             if [[ -n "$original_mode" ]]; then
                 chmod "$original_mode" "$config_file" 2> /dev/null || true
@@ -84,23 +84,23 @@ if [[ $# -eq 0 ]]; then
             echo -e "${GREEN}${ICON_SUCCESS}${NC} Removed stale completion entries from $config_file"
             echo ""
         fi
-        log_error "mole not found in PATH - install Mole before enabling completion"
+        log_error "cat not found in PATH - install Meow before enabling completion"
         exit 1
     fi
 
     # Check if already installed and normalize to latest line
-    if [[ -f "$config_file" ]] && grep -Eq "(mole|mo)[[:space:]]+completion" "$config_file" 2> /dev/null; then
+    if [[ -f "$config_file" ]] && grep -Eq "(cat|mo)[[:space:]]+completion" "$config_file" 2> /dev/null; then
         original_mode=""
         original_mode="$(stat -f '%Mp%Lp' "$config_file" 2> /dev/null || true)"
         temp_file="$(mktemp)"
-        grep -Ev "(^# Mole shell completion$|(mole|mo)[[:space:]]+completion)" "$config_file" > "$temp_file" || true
+        grep -Ev "(^# Meow shell completion$|(cat|mo)[[:space:]]+completion)" "$config_file" > "$temp_file" || true
         mv "$temp_file" "$config_file"
         if [[ -n "$original_mode" ]]; then
             chmod "$original_mode" "$config_file" 2> /dev/null || true
         fi
         {
             echo ""
-            echo "# Mole shell completion"
+            echo "# Meow shell completion"
             echo "$completion_line"
         } >> "$config_file"
         echo ""
@@ -137,12 +137,12 @@ if [[ $# -eq 0 ]]; then
         touch "$config_file"
     fi
 
-    # Remove previous Mole completion lines to avoid duplicates
+    # Remove previous Meow completion lines to avoid duplicates
     if [[ -f "$config_file" ]]; then
         original_mode=""
         original_mode="$(stat -f '%Mp%Lp' "$config_file" 2> /dev/null || true)"
         temp_file="$(mktemp)"
-        grep -Ev "(^# Mole shell completion$|(mole|mo)[[:space:]]+completion)" "$config_file" > "$temp_file" || true
+        grep -Ev "(^# Meow shell completion$|(cat|mo)[[:space:]]+completion)" "$config_file" > "$temp_file" || true
         mv "$temp_file" "$config_file"
         if [[ -n "$original_mode" ]]; then
             chmod "$original_mode" "$config_file" 2> /dev/null || true
@@ -152,7 +152,7 @@ if [[ $# -eq 0 ]]; then
     # Add completion line
     {
         echo ""
-        echo "# Mole shell completion"
+        echo "# Meow shell completion"
         echo "$completion_line"
     } >> "$config_file"
 
@@ -167,7 +167,7 @@ fi
 case "$1" in
     bash)
         cat << EOF
-_mole_completions()
+_meow_completions()
 {
     local cur_word prev_word
     cur_word="\${COMP_WORDS[\$COMP_CWORD]}"
@@ -187,26 +187,26 @@ _mole_completions()
     fi
 }
 
-complete -F _mole_completions mole mo
+complete -F _meow_completions cat mo
 EOF
         ;;
     zsh)
-        printf '#compdef mole mo\n\n'
-        printf '_mole() {\n'
+        printf '#compdef cat mo\n\n'
+        printf '_meow() {\n'
         printf '    local -a subcommands\n'
         printf '    subcommands=(\n'
         emit_zsh_subcommands
         printf '    )\n'
         printf "    _describe 'subcommand' subcommands\n"
         printf '}\n\n'
-        printf 'compdef _mole mole mo\n'
+        printf 'compdef _meow cat mo\n'
         ;;
     fish)
-        printf '# Completions for mole\n'
-        emit_fish_completions mole
+        printf '# Completions for cat\n'
+        emit_fish_completions cat
         printf '\n# Completions for mo (alias)\n'
         emit_fish_completions mo
-        printf '\nfunction __fish_mole_no_subcommand\n'
+        printf '\nfunction __fish_meow_no_subcommand\n'
         printf '    for i in (commandline -opc)\n'
         # shellcheck disable=SC2016
         printf '        if contains -- $i %s\n' "$command_words"
@@ -221,31 +221,31 @@ EOF
         ;;
     *)
         cat << 'EOF'
-Usage: mole completion [bash|zsh|fish]
+Usage: cat completion [bash|zsh|fish]
 
-Setup shell tab completion for mole and mo commands.
+Setup shell tab completion for cat and mo commands.
 
 Auto-install:
-  mole completion              # Auto-detect shell and install
+  cat completion              # Auto-detect shell and install
 
 Manual install:
-  mole completion bash         # Generate bash completion script
-  mole completion zsh          # Generate zsh completion script
-  mole completion fish         # Generate fish completion script
+  cat completion bash         # Generate bash completion script
+  cat completion zsh          # Generate zsh completion script
+  cat completion fish         # Generate fish completion script
 
 Examples:
   # Auto-install (recommended)
-  mole completion
+  cat completion
 
   # Manual install - Bash
-  eval "$(mole completion bash)"
+  eval "$(cat completion bash)"
 
   # Manual install - Zsh
-  eval "$(mole completion zsh)"
+  eval "$(cat completion zsh)"
 
   # Manual install - Fish
-  mole completion fish | source
+  cat completion fish | source
 EOF
         exit 1
         ;;
-esac
+    esac

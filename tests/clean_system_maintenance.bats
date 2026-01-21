@@ -216,8 +216,8 @@ set -euo pipefail
 source "$PROJECT_ROOT/lib/core/common.sh"
 source "$PROJECT_ROOT/lib/clean/brew.sh"
 
-mkdir -p "$HOME/.cache/mole"
-date +%s > "$HOME/.cache/mole/brew_last_cleanup"
+mkdir -p "$HOME/.cache/meow"
+date +%s > "$HOME/.cache/meow/brew_last_cleanup"
 
 brew() { return 0; }
 
@@ -234,8 +234,8 @@ set -euo pipefail
 source "$PROJECT_ROOT/lib/core/common.sh"
 source "$PROJECT_ROOT/lib/clean/brew.sh"
 
-mkdir -p "$HOME/.cache/mole"
-rm -f "$HOME/.cache/mole/brew_last_cleanup"
+mkdir -p "$HOME/.cache/meow"
+rm -f "$HOME/.cache/meow/brew_last_cleanup"
 
     start_inline_spinner(){ :; }
     stop_inline_spinner(){ :; }

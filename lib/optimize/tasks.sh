@@ -4,14 +4,14 @@
 set -euo pipefail
 
 # Config constants (override via env).
-readonly MOLE_TM_THIN_TIMEOUT=180
-readonly MOLE_TM_THIN_VALUE=9999999999
-readonly MOLE_SQLITE_MAX_SIZE=104857600 # 100MB
+readonly MEOW_TM_THIN_TIMEOUT=180
+readonly MEOW_TM_THIN_VALUE=9999999999
+readonly MEOW_SQLITE_MAX_SIZE=104857600 # 100MB
 
 # Dry-run aware output.
 opt_msg() {
     local message="$1"
-    if [[ "${MOLE_DRY_RUN:-0}" == "1" ]]; then
+    if [[ "${MEOW_DRY_RUN:-0}" == "1" ]]; then
         echo -e "  ${YELLOW}${ICON_DRY_RUN}${NC} $message"
     else
         echo -e "  ${GREEN}✓${NC} $message"
@@ -22,7 +22,7 @@ run_launchctl_unload() {
     local plist_file="$1"
     local need_sudo="${2:-false}"
 
-    if [[ "${MOLE_DRY_RUN:-0}" == "1" ]]; then
+    if [[ "${MEOW_DRY_RUN:-0}" == "1" ]]; then
         return 0
     fi
 
@@ -88,13 +88,13 @@ is_memory_pressure_high() {
 }
 
 flush_dns_cache() {
-    if [[ "${MOLE_DRY_RUN:-0}" == "1" ]]; then
-        MOLE_DNS_FLUSHED=1
+    if [[ "${MEOW_DRY_RUN:-0}" == "1" ]]; then
+        MEOW_DNS_FLUSHED=1
         return 0
     fi
 
     if sudo dscacheutil -flushcache 2> /dev/null && sudo killall -HUP mDNSResponder 2> /dev/null; then
-        MOLE_DNS_FLUSHED=1
+        MEOW_DNS_FLUSHED=1
         return 0
     fi
     return 1
@@ -145,7 +145,7 @@ opt_cache_refresh() {
         done
     fi
 
-    if [[ "${MOLE_DRY_RUN:-0}" != "1" ]]; then
+    if [[ "${MEOW_DRY_RUN:-0}" != "1" ]]; then
         qlmanage -r cache > /dev/null 2>&1 || true
         qlmanage -r > /dev/null 2>&1 || true
     fi
@@ -182,7 +182,7 @@ opt_cache_refresh() {
 opt_saved_state_cleanup() {
     if [[ "${MO_DEBUG:-}" == "1" ]]; then
         debug_operation_start "App Saved State Cleanup" "Remove old application saved states"
-        debug_operation_detail "Method" "Find and remove .savedState folders older than $MOLE_SAVED_STATE_AGE_DAYS days"
+        debug_operation_detail "Method" "Find and remove .savedState folders older than $MEOW_SAVED_STATE_AGE_DAYS days"
         debug_operation_detail "Location" "$HOME/Library/Saved Application State"
         debug_operation_detail "Expected outcome" "Reduced disk usage, apps start with clean state"
         debug_risk_level "LOW" "Old saved states, apps will create new ones"
@@ -196,7 +196,7 @@ opt_saved_state_cleanup() {
                 continue
             fi
             safe_remove "$state_path" true > /dev/null 2>&1
-        done < <(command find "$state_dir" -type d -name "*.savedState" -mtime "+$MOLE_SAVED_STATE_AGE_DAYS" -print0 2> /dev/null)
+        done < <(command find "$state_dir" -type d -name "*.savedState" -mtime "+$MEOW_SAVED_STATE_AGE_DAYS" -print0 2> /dev/null)
     fi
 
     opt_msg "App saved states optimized"
@@ -211,7 +211,7 @@ opt_saved_state_cleanup() {
 opt_fix_broken_configs() {
     local spinner_started="false"
     if [[ -t 1 ]]; then
-        MOLE_SPINNER_PREFIX="  " start_inline_spinner "Checking preferences..."
+        MEOW_SPINNER_PREFIX="  " start_inline_spinner "Checking preferences..."
         spinner_started="true"
     fi
 
@@ -238,7 +238,7 @@ opt_network_optimization() {
         debug_risk_level "LOW" "DNS cache is automatically rebuilt"
     fi
 
-    if [[ "${MOLE_DNS_FLUSHED:-0}" == "1" ]]; then
+    if [[ "${MEOW_DNS_FLUSHED:-0}" == "1" ]]; then
         opt_msg "DNS cache already refreshed"
         opt_msg "mDNSResponder already restarted"
         return 0
@@ -282,8 +282,8 @@ opt_sqlite_vacuum() {
     fi
 
     local spinner_started="false"
-    if [[ "${MOLE_DRY_RUN:-0}" != "1" && -t 1 ]]; then
-        MOLE_SPINNER_PREFIX="  " start_inline_spinner "Optimizing databases..."
+    if [[ "${MEOW_DRY_RUN:-0}" != "1" && -t 1 ]]; then
+        MEOW_SPINNER_PREFIX="  " start_inline_spinner "Optimizing databases..."
         spinner_started="true"
     fi
 
@@ -313,7 +313,7 @@ opt_sqlite_vacuum() {
             # Skip large DBs (>100MB).
             local file_size
             file_size=$(get_file_size "$db_file")
-            if [[ "$file_size" -gt "$MOLE_SQLITE_MAX_SIZE" ]]; then
+            if [[ "$file_size" -gt "$MEOW_SQLITE_MAX_SIZE" ]]; then
                 ((skipped++))
                 continue
             fi
@@ -333,7 +333,7 @@ opt_sqlite_vacuum() {
             fi
 
             # Verify integrity before VACUUM.
-            if [[ "${MOLE_DRY_RUN:-0}" != "1" ]]; then
+            if [[ "${MEOW_DRY_RUN:-0}" != "1" ]]; then
                 local integrity_check=""
                 set +e
                 integrity_check=$(run_with_timeout 10 sqlite3 "$db_file" "PRAGMA integrity_check;" 2> /dev/null)
@@ -347,7 +347,7 @@ opt_sqlite_vacuum() {
             fi
 
             local exit_code=0
-            if [[ "${MOLE_DRY_RUN:-0}" != "1" ]]; then
+            if [[ "${MEOW_DRY_RUN:-0}" != "1" ]]; then
                 set +e
                 run_with_timeout 20 sqlite3 "$db_file" "VACUUM;" 2> /dev/null
                 exit_code=$?
@@ -411,7 +411,7 @@ opt_launch_services_rebuild() {
     if [[ -f "$lsregister" ]]; then
         local success=0
 
-        if [[ "${MOLE_DRY_RUN:-0}" != "1" ]]; then
+        if [[ "${MEOW_DRY_RUN:-0}" != "1" ]]; then
             set +e
             "$lsregister" -r -domain local -domain user -domain system > /dev/null 2>&1
             success=$?
@@ -453,7 +453,7 @@ opt_font_cache_rebuild() {
 
     local success=false
 
-    if [[ "${MOLE_DRY_RUN:-0}" != "1" ]]; then
+    if [[ "${MEOW_DRY_RUN:-0}" != "1" ]]; then
         if sudo atsutil databases -remove > /dev/null 2>&1; then
             success=true
         fi
@@ -484,7 +484,7 @@ opt_memory_pressure_relief() {
         debug_risk_level "LOW" "Safe system command, does not affect active processes"
     fi
 
-    if [[ "${MOLE_DRY_RUN:-0}" != "1" ]]; then
+    if [[ "${MEOW_DRY_RUN:-0}" != "1" ]]; then
         if ! is_memory_pressure_high; then
             opt_msg "Memory pressure already optimal"
             return 0
@@ -507,7 +507,7 @@ opt_network_stack_optimize() {
     local route_flushed="false"
     local arp_flushed="false"
 
-    if [[ "${MOLE_DRY_RUN:-0}" != "1" ]]; then
+    if [[ "${MEOW_DRY_RUN:-0}" != "1" ]]; then
         local route_ok=true
         local dns_ok=true
 
@@ -561,7 +561,7 @@ opt_disk_permissions_repair() {
     local user_id
     user_id=$(id -u)
 
-    if [[ "${MOLE_DRY_RUN:-0}" != "1" ]]; then
+    if [[ "${MEOW_DRY_RUN:-0}" != "1" ]]; then
         if ! needs_permissions_repair; then
             opt_msg "User directory permissions already optimal"
             return 0
@@ -604,11 +604,11 @@ opt_bluetooth_reset() {
 
     local spinner_started="false"
     if [[ -t 1 ]]; then
-        MOLE_SPINNER_PREFIX="  " start_inline_spinner "Checking Bluetooth..."
+        MEOW_SPINNER_PREFIX="  " start_inline_spinner "Checking Bluetooth..."
         spinner_started="true"
     fi
 
-    if [[ "${MOLE_DRY_RUN:-0}" != "1" ]]; then
+    if [[ "${MEOW_DRY_RUN:-0}" != "1" ]]; then
         if has_bluetooth_hid_connected; then
             if [[ "$spinner_started" == "true" ]]; then
                 stop_inline_spinner
@@ -704,7 +704,7 @@ opt_spotlight_index_optimize() {
                 return 0
             fi
 
-            if [[ "${MOLE_DRY_RUN:-0}" != "1" ]]; then
+            if [[ "${MEOW_DRY_RUN:-0}" != "1" ]]; then
                 echo -e "  ${BLUE}ℹ${NC} Spotlight search is slow, rebuilding index (may take 1-2 hours)"
                 if sudo mdutil -E / > /dev/null 2>&1; then
                     opt_msg "Spotlight index rebuild started"
@@ -741,7 +741,7 @@ opt_dock_refresh() {
         touch "$dock_plist" 2> /dev/null || true
     fi
 
-    if [[ "${MOLE_DRY_RUN:-0}" != "1" ]]; then
+    if [[ "${MEOW_DRY_RUN:-0}" != "1" ]]; then
         killall Dock 2> /dev/null || true
     fi
 

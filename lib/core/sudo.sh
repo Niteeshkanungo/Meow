@@ -201,8 +201,8 @@ request_sudo_access() {
 # ============================================================================
 
 # Global state
-MOLE_SUDO_KEEPALIVE_PID=""
-MOLE_SUDO_ESTABLISHED="false"
+MEOW_SUDO_KEEPALIVE_PID=""
+MEOW_SUDO_ESTABLISHED="false"
 
 # Start sudo keepalive
 _start_sudo_keepalive() {
@@ -268,36 +268,36 @@ ensure_sudo_session() {
     local prompt="${1:-Admin access required}"
 
     # Check if already established
-    if has_sudo_session && [[ "$MOLE_SUDO_ESTABLISHED" == "true" ]]; then
+    if has_sudo_session && [[ "$MEOW_SUDO_ESTABLISHED" == "true" ]]; then
         return 0
     fi
 
     # Stop old keepalive if exists
-    if [[ -n "$MOLE_SUDO_KEEPALIVE_PID" ]]; then
-        _stop_sudo_keepalive "$MOLE_SUDO_KEEPALIVE_PID"
-        MOLE_SUDO_KEEPALIVE_PID=""
+    if [[ -n "$MEOW_SUDO_KEEPALIVE_PID" ]]; then
+        _stop_sudo_keepalive "$MEOW_SUDO_KEEPALIVE_PID"
+        MEOW_SUDO_KEEPALIVE_PID=""
     fi
 
     # Request sudo access
     if ! request_sudo "$prompt"; then
-        MOLE_SUDO_ESTABLISHED="false"
+        MEOW_SUDO_ESTABLISHED="false"
         return 1
     fi
 
     # Start keepalive
-    MOLE_SUDO_KEEPALIVE_PID=$(_start_sudo_keepalive)
+    MEOW_SUDO_KEEPALIVE_PID=$(_start_sudo_keepalive)
 
-    MOLE_SUDO_ESTABLISHED="true"
+    MEOW_SUDO_ESTABLISHED="true"
     return 0
 }
 
 # Stop sudo session and cleanup
 stop_sudo_session() {
-    if [[ -n "$MOLE_SUDO_KEEPALIVE_PID" ]]; then
-        _stop_sudo_keepalive "$MOLE_SUDO_KEEPALIVE_PID"
-        MOLE_SUDO_KEEPALIVE_PID=""
+    if [[ -n "$MEOW_SUDO_KEEPALIVE_PID" ]]; then
+        _stop_sudo_keepalive "$MEOW_SUDO_KEEPALIVE_PID"
+        MEOW_SUDO_KEEPALIVE_PID=""
     fi
-    MOLE_SUDO_ESTABLISHED="false"
+    MEOW_SUDO_ESTABLISHED="false"
 }
 
 # Register cleanup on script exit

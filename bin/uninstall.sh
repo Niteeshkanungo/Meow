@@ -30,7 +30,7 @@ total_size_cleaned=0
 # Scan applications and collect information.
 scan_applications() {
     # Cache app scan (24h TTL).
-    local cache_dir="$HOME/.cache/mole"
+    local cache_dir="$HOME/.cache/meow"
     local cache_file="$cache_dir/app_scan_cache"
     local cache_ttl=86400 # 24 hours
     local force_rescan="${1:-false}"
@@ -359,9 +359,9 @@ load_applications() {
 
 # Cleanup: restore cursor and kill keepalive.
 cleanup() {
-    if [[ "${MOLE_ALT_SCREEN_ACTIVE:-}" == "1" ]]; then
+    if [[ "${MEOW_ALT_SCREEN_ACTIVE:-}" == "1" ]]; then
         leave_alt_screen
-        unset MOLE_ALT_SCREEN_ACTIVE
+        unset MEOW_ALT_SCREEN_ACTIVE
     fi
     if [[ -n "${sudo_keepalive_pid:-}" ]]; then
         kill "$sudo_keepalive_pid" 2> /dev/null || true
@@ -394,7 +394,7 @@ main() {
 
     while true; do
         local needs_scanning=true
-        local cache_file="$HOME/.cache/mole/app_scan_cache"
+        local cache_file="$HOME/.cache/meow/app_scan_cache"
         if [[ $force_rescan == false && -f "$cache_file" ]]; then
             local cache_age=$(($(get_epoch_seconds) - $(get_file_mtime "$cache_file")))
             [[ $cache_age -eq $(get_epoch_seconds) ]] && cache_age=86401
@@ -402,50 +402,50 @@ main() {
         fi
 
         if [[ $needs_scanning == true && $use_inline_loading == true ]]; then
-            if [[ "${MOLE_ALT_SCREEN_ACTIVE:-}" != "1" ]]; then
+            if [[ "${MEOW_ALT_SCREEN_ACTIVE:-}" != "1" ]]; then
                 enter_alt_screen
-                export MOLE_ALT_SCREEN_ACTIVE=1
-                export MOLE_INLINE_LOADING=1
-                export MOLE_MANAGED_ALT_SCREEN=1
+                export MEOW_ALT_SCREEN_ACTIVE=1
+                export MEOW_INLINE_LOADING=1
+                export MEOW_MANAGED_ALT_SCREEN=1
             fi
             printf "\033[2J\033[H" >&2
         else
-            unset MOLE_INLINE_LOADING MOLE_MANAGED_ALT_SCREEN MOLE_ALT_SCREEN_ACTIVE
-            if [[ "${MOLE_ALT_SCREEN_ACTIVE:-}" == "1" ]]; then
+            unset MEOW_INLINE_LOADING MEOW_MANAGED_ALT_SCREEN MEOW_ALT_SCREEN_ACTIVE
+            if [[ "${MEOW_ALT_SCREEN_ACTIVE:-}" == "1" ]]; then
                 leave_alt_screen
-                unset MOLE_ALT_SCREEN_ACTIVE
+                unset MEOW_ALT_SCREEN_ACTIVE
             fi
         fi
 
         local apps_file=""
         if ! apps_file=$(scan_applications "$force_rescan"); then
-            if [[ "${MOLE_ALT_SCREEN_ACTIVE:-}" == "1" ]]; then
+            if [[ "${MEOW_ALT_SCREEN_ACTIVE:-}" == "1" ]]; then
                 printf "\033[2J\033[H" >&2
                 leave_alt_screen
-                unset MOLE_ALT_SCREEN_ACTIVE
-                unset MOLE_INLINE_LOADING MOLE_MANAGED_ALT_SCREEN
+                unset MEOW_ALT_SCREEN_ACTIVE
+                unset MEOW_INLINE_LOADING MEOW_MANAGED_ALT_SCREEN
             fi
             return 1
         fi
 
-        if [[ "${MOLE_ALT_SCREEN_ACTIVE:-}" == "1" ]]; then
+        if [[ "${MEOW_ALT_SCREEN_ACTIVE:-}" == "1" ]]; then
             printf "\033[2J\033[H" >&2
         fi
 
         if [[ ! -f "$apps_file" ]]; then
-            if [[ "${MOLE_ALT_SCREEN_ACTIVE:-}" == "1" ]]; then
+            if [[ "${MEOW_ALT_SCREEN_ACTIVE:-}" == "1" ]]; then
                 leave_alt_screen
-                unset MOLE_ALT_SCREEN_ACTIVE
-                unset MOLE_INLINE_LOADING MOLE_MANAGED_ALT_SCREEN
+                unset MEOW_ALT_SCREEN_ACTIVE
+                unset MEOW_INLINE_LOADING MEOW_MANAGED_ALT_SCREEN
             fi
             return 1
         fi
 
         if ! load_applications "$apps_file"; then
-            if [[ "${MOLE_ALT_SCREEN_ACTIVE:-}" == "1" ]]; then
+            if [[ "${MEOW_ALT_SCREEN_ACTIVE:-}" == "1" ]]; then
                 leave_alt_screen
-                unset MOLE_ALT_SCREEN_ACTIVE
-                unset MOLE_INLINE_LOADING MOLE_MANAGED_ALT_SCREEN
+                unset MEOW_ALT_SCREEN_ACTIVE
+                unset MEOW_INLINE_LOADING MEOW_MANAGED_ALT_SCREEN
             fi
             rm -f "$apps_file"
             return 1
@@ -457,10 +457,10 @@ main() {
         set -e
 
         if [[ $exit_code -ne 0 ]]; then
-            if [[ "${MOLE_ALT_SCREEN_ACTIVE:-}" == "1" ]]; then
+            if [[ "${MEOW_ALT_SCREEN_ACTIVE:-}" == "1" ]]; then
                 leave_alt_screen
-                unset MOLE_ALT_SCREEN_ACTIVE
-                unset MOLE_INLINE_LOADING MOLE_MANAGED_ALT_SCREEN
+                unset MEOW_ALT_SCREEN_ACTIVE
+                unset MEOW_INLINE_LOADING MEOW_MANAGED_ALT_SCREEN
             fi
             show_cursor
             clear_screen
@@ -475,10 +475,10 @@ main() {
             return 0
         fi
 
-        if [[ "${MOLE_ALT_SCREEN_ACTIVE:-}" == "1" ]]; then
+        if [[ "${MEOW_ALT_SCREEN_ACTIVE:-}" == "1" ]]; then
             leave_alt_screen
-            unset MOLE_ALT_SCREEN_ACTIVE
-            unset MOLE_INLINE_LOADING MOLE_MANAGED_ALT_SCREEN
+            unset MEOW_ALT_SCREEN_ACTIVE
+            unset MEOW_INLINE_LOADING MEOW_MANAGED_ALT_SCREEN
         fi
 
         show_cursor

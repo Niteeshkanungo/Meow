@@ -62,7 +62,7 @@ ask_for_updates() {
         update_list+=("  • macOS system")
     fi
 
-    if [[ -n "${MOLE_UPDATE_AVAILABLE:-}" && "${MOLE_UPDATE_AVAILABLE}" == "true" ]]; then
+    if [[ -n "${MEOW_UPDATE_AVAILABLE:-}" && "${MEOW_UPDATE_AVAILABLE}" == "true" ]]; then
         has_updates=true
         update_list+=("  • Mole")
     fi
@@ -77,7 +77,7 @@ ask_for_updates() {
     done
     echo ""
     # If only Mole is relevant for automation, prompt just for Mole
-    if [[ "${MOLE_UPDATE_AVAILABLE:-}" == "true" ]]; then
+    if [[ "${MEOW_UPDATE_AVAILABLE:-}" == "true" ]]; then
         echo ""
         echo -ne "${YELLOW}Update Mole now?${NC} ${GRAY}Enter confirm / ESC cancel${NC}: "
 
@@ -108,7 +108,7 @@ perform_updates() {
     local updated_count=0
     local total_count=0
 
-    if [[ -n "${MOLE_UPDATE_AVAILABLE:-}" && "${MOLE_UPDATE_AVAILABLE}" == "true" ]]; then
+    if [[ -n "${MEOW_UPDATE_AVAILABLE:-}" && "${MEOW_UPDATE_AVAILABLE}" == "true" ]]; then
         echo -e "${BLUE}Updating Mole...${NC}"
         local mole_bin="${SCRIPT_DIR}/../../mole"
         [[ ! -f "$mole_bin" ]] && mole_bin=$(command -v mole 2> /dev/null || echo "")

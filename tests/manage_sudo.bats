@@ -60,13 +60,13 @@ setup() {
 
 
 @test "stop_sudo_session cleans up keepalive process" {
-    export MOLE_SUDO_KEEPALIVE_PID="99999"
+    export MEOW_SUDO_KEEPALIVE_PID="99999"
 
-    run bash -c "export MOLE_SUDO_KEEPALIVE_PID=99999; source '$PROJECT_ROOT/lib/core/common.sh'; source '$PROJECT_ROOT/lib/core/sudo.sh'; stop_sudo_session"
+    run bash -c "export MEOW_SUDO_KEEPALIVE_PID=99999; source '$PROJECT_ROOT/lib/core/common.sh'; source '$PROJECT_ROOT/lib/core/sudo.sh'; stop_sudo_session"
     [ "$status" -eq 0 ]
 }
 
 @test "sudo manager initializes global state correctly" {
-    result=$(bash -c "source '$PROJECT_ROOT/lib/core/common.sh'; source '$PROJECT_ROOT/lib/core/sudo.sh'; echo \$MOLE_SUDO_ESTABLISHED")
+    result=$(bash -c "source '$PROJECT_ROOT/lib/core/common.sh'; source '$PROJECT_ROOT/lib/core/sudo.sh'; echo \$MEOW_SUDO_ESTABLISHED")
     [[ "$result" == "false" ]] || [[ -z "$result" ]]
 }

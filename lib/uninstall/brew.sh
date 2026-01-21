@@ -5,10 +5,10 @@
 set -euo pipefail
 
 # Prevent multiple sourcing
-if [[ -n "${MOLE_BREW_UNINSTALL_LOADED:-}" ]]; then
+if [[ -n "${MEOW_BREW_UNINSTALL_LOADED:-}" ]]; then
     return 0
 fi
-readonly MOLE_BREW_UNINSTALL_LOADED=1
+readonly MEOW_BREW_UNINSTALL_LOADED=1
 
 # Resolve a path to its absolute real path (follows symlinks)
 # Args: $1 - path to resolve

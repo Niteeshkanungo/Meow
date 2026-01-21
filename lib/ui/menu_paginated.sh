@@ -73,7 +73,7 @@ paginated_multi_select() {
     shift
     local -a items=("$@")
     local external_alt_screen=false
-    if [[ "${MOLE_MANAGED_ALT_SCREEN:-}" == "1" || "${MOLE_MANAGED_ALT_SCREEN:-}" == "true" ]]; then
+    if [[ "${MEOW_MANAGED_ALT_SCREEN:-}" == "1" || "${MEOW_MANAGED_ALT_SCREEN:-}" == "true" ]]; then
         external_alt_screen=true
     fi
 
@@ -87,8 +87,8 @@ paginated_multi_select() {
     local items_per_page=$(_pm_calculate_items_per_page)
     local cursor_pos=0
     local top_index=0
-    local sort_mode="${MOLE_MENU_SORT_MODE:-${MOLE_MENU_SORT_DEFAULT:-date}}" # date|name|size
-    local sort_reverse="${MOLE_MENU_SORT_REVERSE:-false}"
+    local sort_mode="${MEOW_MENU_SORT_MODE:-${MEOW_MENU_SORT_DEFAULT:-date}}" # date|name|size
+    local sort_reverse="${MEOW_MENU_SORT_REVERSE:-false}"
 
     # Metadata (optional)
     # epochs[i]   -> last_used_epoch (numeric) for item i
@@ -96,12 +96,12 @@ paginated_multi_select() {
     local -a epochs=()
     local -a sizekb=()
     local has_metadata="false"
-    if [[ -n "${MOLE_MENU_META_EPOCHS:-}" ]]; then
-        while IFS= read -r v; do epochs+=("${v:-0}"); done < <(_pm_parse_csv_to_array "$MOLE_MENU_META_EPOCHS")
+    if [[ -n "${MEOW_MENU_META_EPOCHS:-}" ]]; then
+        while IFS= read -r v; do epochs+=("${v:-0}"); done < <(_pm_parse_csv_to_array "$MEOW_MENU_META_EPOCHS")
         has_metadata="true"
     fi
-    if [[ -n "${MOLE_MENU_META_SIZEKB:-}" ]]; then
-        while IFS= read -r v; do sizekb+=("${v:-0}"); done < <(_pm_parse_csv_to_array "$MOLE_MENU_META_SIZEKB")
+    if [[ -n "${MEOW_MENU_META_SIZEKB:-}" ]]; then
+        while IFS= read -r v; do sizekb+=("${v:-0}"); done < <(_pm_parse_csv_to_array "$MEOW_MENU_META_SIZEKB")
         has_metadata="true"
     fi
 
@@ -127,8 +127,8 @@ paginated_multi_select() {
         selected[i]=false
     done
 
-    if [[ -n "${MOLE_PRESELECTED_INDICES:-}" ]]; then
-        local cleaned_preselect="${MOLE_PRESELECTED_INDICES//[[:space:]]/}"
+    if [[ -n "${MEOW_PRESELECTED_INDICES:-}" ]]; then
+        local cleaned_preselect="${MEOW_PRESELECTED_INDICES//[[:space:]]/}"
         local -a initial_indices=()
         IFS=',' read -ra initial_indices <<< "$cleaned_preselect"
         for idx in "${initial_indices[@]}"; do
@@ -163,8 +163,8 @@ paginated_multi_select() {
     # Cleanup function
     cleanup() {
         trap - EXIT INT TERM
-        export MOLE_MENU_SORT_MODE="$sort_mode"
-        export MOLE_MENU_SORT_REVERSE="$sort_reverse"
+        export MEOW_MENU_SORT_MODE="$sort_mode"
+        export MEOW_MENU_SORT_REVERSE="$sort_reverse"
         restore_terminal
     }
 
@@ -723,9 +723,9 @@ paginated_multi_select() {
                 fi
 
                 trap - EXIT INT TERM
-                MOLE_SELECTION_RESULT="$final_result"
-                export MOLE_MENU_SORT_MODE="$sort_mode"
-                export MOLE_MENU_SORT_REVERSE="$sort_reverse"
+                MEOW_SELECTION_RESULT="$final_result"
+                export MEOW_MENU_SORT_MODE="$sort_mode"
+                export MEOW_MENU_SORT_REVERSE="$sort_reverse"
                 restore_terminal
                 return 0
                 ;;

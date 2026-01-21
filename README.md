@@ -1,19 +1,19 @@
 <div align="center">
-  <h1>Mole</h1>
+  <h1>Meow</h1>
   <p><em>Deep clean and optimize your Mac.</em></p>
 </div>
 
 <p align="center">
-  <a href="https://github.com/tw93/mole/stargazers"><img src="https://img.shields.io/github/stars/tw93/mole?style=flat-square" alt="Stars"></a>
-  <a href="https://github.com/tw93/mole/releases"><img src="https://img.shields.io/github/v/tag/tw93/mole?label=version&style=flat-square" alt="Version"></a>
+  <a href="https://github.com/tw93/meow/stargazers"><img src="https://img.shields.io/github/stars/tw93/meow?style=flat-square" alt="Stars"></a>
+  <a href="https://github.com/tw93/meow/releases"><img src="https://img.shields.io/github/v/tag/tw93/meow?label=version&style=flat-square" alt="Version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square" alt="License"></a>
-  <a href="https://github.com/tw93/mole/commits"><img src="https://img.shields.io/github/commit-activity/m/tw93/mole?style=flat-square" alt="Commits"></a>
+  <a href="https://github.com/tw93/meow/commits"><img src="https://img.shields.io/github/commit-activity/m/tw93/meow?style=flat-square" alt="Commits"></a>
   <a href="https://twitter.com/HiTw93"><img src="https://img.shields.io/badge/follow-Tw93-red?style=flat-square&logo=Twitter" alt="Twitter"></a>
   <a href="https://t.me/+GclQS9ZnxyI2ODQ1"><img src="https://img.shields.io/badge/chat-Telegram-blueviolet?style=flat-square&logo=Telegram" alt="Telegram"></a>
 </p>
 
 <p align="center">
-  <img src="https://cdn.tw93.fun/img/mole.jpeg" alt="Mole - 95.50GB freed" width="1000" />
+  <img src="https://cdn.tw93.fun/img/mole.jpeg" alt="Meow - 95.50GB freed" width="1000" />
 </p>
 
 ## Features
@@ -29,17 +29,17 @@
 **Install via Homebrew:**
 
 ```bash
-brew install mole
+brew install meow
 ```
 
 **Or via script:**
 
 ```bash
 # Optional args: -s latest for main branch code, -s 1.17.0 for specific version
-curl -fsSL https://raw.githubusercontent.com/tw93/mole/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/tw93/meow/main/install.sh | bash
 ```
 
-**Windows:** Mole is designed for macOS, but we offer an experimental Windows version based on user demand. See the [windows branch](https://github.com/tw93/Mole/tree/windows) — for early adopters only.
+**Windows:** Meow is designed for macOS, but we offer an experimental Windows version based on user demand. See the [windows branch](https://github.com/tw93/Meow/tree/windows) — for early adopters only.
 
 **Run:**
 
@@ -55,8 +55,8 @@ mo installer                 # Find and remove installer files
 
 mo touchid                   # Configure Touch ID for sudo
 mo completion                # Set up shell tab completion
-mo update                    # Update Mole
-mo remove                    # Remove Mole from system
+mo update                    # Update Meow
+mo remove                    # Remove Meow from system
 mo --help                    # Show help
 mo --version                 # Show installed version
 
@@ -169,7 +169,7 @@ Real-time dashboard with system health score, hardware info, and performance met
 ```bash
 $ mo status
 
-Mole Status  Health ● 92  MacBook Pro · M4 Pro · 32GB · macOS 14.5
+Meow Status  Health ● 92  MacBook Pro · M4 Pro · 32GB · macOS 14.5
 
 ⚙ CPU                                    ▦ Memory
 Total   ████████████░░░░░░░  45.2%       Used    ███████████░░░░░░░  58.4%
@@ -215,7 +215,7 @@ Select Categories to Clean - 18.5GB (8 selected)
 <details>
 <summary><strong>Custom Scan Paths</strong></summary>
 
-Run `mo purge --paths` to configure which directories to scan, or edit `~/.config/mole/purge_paths` directly:
+Run `mo purge --paths` to configure which directories to scan, or edit `~/.config/meow/purge_paths` directly:
 
 ```shell
 ~/Documents/MyProjects
@@ -246,38 +246,38 @@ Select Installers to Remove - 3.8GB (5 selected)
 
 ## Quick Launchers
 
-Launch Mole commands instantly from Raycast or Alfred:
+Launch Meow commands instantly from Raycast or Alfred:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/tw93/Mole/main/scripts/setup-quick-launchers.sh | bash
+curl -fsSL https://raw.githubusercontent.com/tw93/Meow/main/scripts/setup-quick-launchers.sh | bash
 ```
 
 Adds 5 commands: `clean`, `uninstall`, `optimize`, `analyze`, `status`.
 
-Mole automatically detects your terminal, or set `MO_LAUNCHER_APP=<name>` to override. For Raycast users: if this is your first script directory, add it via Raycast Extensions → Add Script Directory, then run "Reload Script Directories".
+Meow automatically detects your terminal, or set `MO_LAUNCHER_APP=<name>` to override. For Raycast users: if this is your first script directory, add it via Raycast Extensions → Add Script Directory, then run "Reload Script Directories".
 
 ## Community Love
 
-Mole wouldn't be possible without these amazing contributors. They've built countless features that make Mole what it is today. Go follow them! ❤️
+Meow wouldn't be possible without these amazing contributors. They've built countless features that make Meow what it is today. Go follow them! ❤️
 
-<a href="https://github.com/tw93/Mole/graphs/contributors">
+<a href="https://github.com/tw93/Meow/graphs/contributors">
   <img src="./CONTRIBUTORS.svg?v=2" width="1000" />
 </a>
 
-Join thousands of users worldwide who trust Mole to keep their Macs clean and optimized.
+Join thousands of users worldwide who trust Meow to keep their Macs clean and optimized.
 
-<img src="https://cdn.tw93.fun/pic/lovemole.jpeg" alt="Community feedback on Mole" width="1000" />
+<img src="https://cdn.tw93.fun/pic/lovemole.jpeg" alt="Community feedback on Meow" width="1000" />
 
 ## Support
 
-- If Mole saved you disk space, consider starring the repo or [sharing it](https://twitter.com/intent/tweet?url=https://github.com/tw93/Mole&text=Mole%20-%20Deep%20clean%20and%20optimize%20your%20Mac.) with friends.
-- Have ideas or fixes? Check our [Contributing Guide](CONTRIBUTING.md), then open an issue or PR to help shape Mole's future.
-- Love Mole? <a href="https://miaoyan.app/cats.html?name=Mole" target="_blank">Buy Tw93 an ice-cold Coke</a> to keep the project alive and kicking! 🥤
+- If Meow saved you disk space, consider starring the repo or [sharing it](https://twitter.com/intent/tweet?url=https://github.com/tw93/Meow&text=Meow%20-%20Deep%20clean%20and%20optimize%20your%20Mac.) with friends.
+- Have ideas or fixes? Check our [Contributing Guide](CONTRIBUTING.md), then open an issue or PR to help shape Meow's future.
+- Love Meow? <a href="https://miaoyan.app/cats.html?name=Meow" target="_blank">Buy Tw93 an ice-cold Coke</a> to keep the project alive and kicking! 🥤
 
 <details>
 <summary><strong>Friends who bought me Coke</strong></summary>
 <br/>
-<a href="https://miaoyan.app/cats.html?name=Mole"><img src="https://miaoyan.app/assets/sponsors.svg" width="1000" /></a>
+<a href="https://miaoyan.app/cats.html?name=Meow"><img src="https://miaoyan.app/assets/sponsors.svg" width="1000" /></a>
 </details>
 
 ## License

@@ -5,24 +5,24 @@
 set -euo pipefail
 
 # Prevent multiple sourcing
-if [[ -n "${MOLE_LOG_LOADED:-}" ]]; then
+if [[ -n "${MEOW_LOG_LOADED:-}" ]]; then
     return 0
 fi
-readonly MOLE_LOG_LOADED=1
+readonly MEOW_LOG_LOADED=1
 
 # Ensure base.sh is loaded for colors and icons
-if [[ -z "${MOLE_BASE_LOADED:-}" ]]; then
-    _MOLE_CORE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ -z "${MEOW_BASE_LOADED:-}" ]]; then
+    _MEOW_CORE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     # shellcheck source=lib/core/base.sh
-    source "$_MOLE_CORE_DIR/base.sh"
+    source "$_MEOW_CORE_DIR/base.sh"
 fi
 
 # ============================================================================
 # Logging Configuration
 # ============================================================================
 
-readonly LOG_FILE="${HOME}/.config/mole/mole.log"
-readonly DEBUG_LOG_FILE="${HOME}/.config/mole/mole_debug_session.log"
+readonly LOG_FILE="${HOME}/.config/meow/mole.log"
+readonly DEBUG_LOG_FILE="${HOME}/.config/meow/mole_debug_session.log"
 readonly LOG_MAX_SIZE_DEFAULT=1048576 # 1MB
 
 # Ensure log directory and file exist with correct ownership
@@ -35,8 +35,8 @@ ensure_user_file "$LOG_FILE"
 # Rotate log file if it exceeds maximum size
 rotate_log_once() {
     # Skip if already checked this session
-    [[ -n "${MOLE_LOG_ROTATED:-}" ]] && return 0
-    export MOLE_LOG_ROTATED=1
+    [[ -n "${MEOW_LOG_ROTATED:-}" ]] && return 0
+    export MEOW_LOG_ROTATED=1
 
     local max_size="$LOG_MAX_SIZE_DEFAULT"
     if [[ -f "$LOG_FILE" ]] && [[ $(get_file_size "$LOG_FILE") -gt "$max_size" ]]; then
@@ -175,8 +175,8 @@ debug_risk_level() {
 # Log system information for debugging
 log_system_info() {
     # Only allow once per session
-    [[ -n "${MOLE_SYS_INFO_LOGGED:-}" ]] && return 0
-    export MOLE_SYS_INFO_LOGGED=1
+    [[ -n "${MEOW_SYS_INFO_LOGGED:-}" ]] && return 0
+    export MEOW_SYS_INFO_LOGGED=1
 
     # Reset debug log file for this new session
     ensure_user_file "$DEBUG_LOG_FILE"

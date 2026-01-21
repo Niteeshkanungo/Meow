@@ -87,7 +87,7 @@ safe_rm() {
 
 # Install defaults
 INSTALL_DIR="/usr/local/bin"
-CONFIG_DIR="$HOME/.config/mole"
+CONFIG_DIR="$HOME/.config/meow"
 SOURCE_DIR=""
 
 ACTION="install"
@@ -144,7 +144,7 @@ resolve_source_dir() {
     }
     trap cleanup_tmp EXIT
 
-    local branch="${MOLE_VERSION:-}"
+    local branch="${MEOW_VERSION:-}"
     if [[ -z "$branch" ]]; then
         branch="$(get_latest_release_tag || true)"
     fi
@@ -157,12 +157,12 @@ resolve_source_dir() {
     if [[ "$branch" != "main" && "$branch" != "dev" ]]; then
         branch="$(normalize_release_tag "$branch")"
     fi
-    local url="https://github.com/tw93/mole/archive/refs/heads/main.tar.gz"
+    local url="https://github.com/tw93/meow/archive/refs/heads/main.tar.gz"
 
     if [[ "$branch" == "dev" ]]; then
-        url="https://github.com/tw93/mole/archive/refs/heads/dev.tar.gz"
+        url="https://github.com/tw93/meow/archive/refs/heads/dev.tar.gz"
     elif [[ "$branch" != "main" ]]; then
-        url="https://github.com/tw93/mole/archive/refs/tags/${branch}.tar.gz"
+        url="https://github.com/tw93/meow/archive/refs/tags/${branch}.tar.gz"
     fi
 
     start_line_spinner "Fetching Mole source (${branch})..."
@@ -197,7 +197,7 @@ resolve_source_dir() {
             git_args+=("--branch" "$branch")
         fi
 
-        if git clone "${git_args[@]}" https://github.com/tw93/mole.git "$tmp/mole" > /dev/null 2>&1; then
+        if git clone "${git_args[@]}" https://github.com/tw93/meow.git "$tmp/mole" > /dev/null 2>&1; then
             stop_line_spinner
             SOURCE_DIR="$tmp/mole"
             return 0
@@ -223,7 +223,7 @@ get_latest_release_tag() {
         return 1
     fi
     tag=$(curl -fsSL --connect-timeout 2 --max-time 3 \
-        "https://api.github.com/repos/tw93/mole/releases/latest" 2> /dev/null |
+        "https://api.github.com/repos/tw93/meow/releases/latest" 2> /dev/null |
         sed -n 's/.*"tag_name":[[:space:]]*"\([^"]*\)".*/\1/p' | head -n1)
     if [[ -z "$tag" ]]; then
         return 1
@@ -235,7 +235,7 @@ get_latest_release_tag_from_git() {
     if ! command -v git > /dev/null 2>&1; then
         return 1
     fi
-    git ls-remote --tags --refs https://github.com/tw93/mole.git 2> /dev/null |
+    git ls-remote --tags --refs https://github.com/tw93/meow.git 2> /dev/null |
         awk -F/ '{print $NF}' |
         grep -E '^V[0-9]' |
         sort -V |
@@ -292,19 +292,19 @@ parse_args() {
         fi
         case "$token" in
             latest | main)
-                export MOLE_VERSION="main"
-                export MOLE_EDGE_INSTALL="true"
+                export MEOW_VERSION="main"
+                export MEOW_EDGE_INSTALL="true"
                 version_token="$token"
                 unset 'args[$i]'
                 ;;
             dev)
-                export MOLE_VERSION="dev"
-                export MOLE_EDGE_INSTALL="true"
+                export MEOW_VERSION="dev"
+                export MEOW_EDGE_INSTALL="true"
                 version_token="$token"
                 unset 'args[$i]'
                 ;;
             [0-9]* | V[0-9]* | v[0-9]*)
-                export MOLE_VERSION="$token"
+                export MEOW_VERSION="$token"
                 version_token="$token"
                 unset 'args[$i]'
                 ;;
@@ -478,7 +478,7 @@ download_binary() {
         return 0
     fi
 
-    if [[ "${MOLE_EDGE_INSTALL:-}" == "true" ]]; then
+    if [[ "${MEOW_EDGE_INSTALL:-}" == "true" ]]; then
         if build_binary_from_source "$binary_name" "$target_path"; then
             return 0
         fi
@@ -493,7 +493,7 @@ download_binary() {
         fi
         return 1
     fi
-    local url="https://github.com/tw93/mole/releases/download/V${version}/${binary_name}-darwin-${arch_suffix}"
+    local url="https://github.com/tw93/meow/releases/download/V${version}/${binary_name}-darwin-${arch_suffix}"
 
     # Skip preflight network checks to avoid false negatives.
 
@@ -712,10 +712,10 @@ perform_install() {
     fi
 
     # Edge installs get a suffix to make the version explicit.
-    if [[ "${MOLE_EDGE_INSTALL:-}" == "true" ]]; then
+    if [[ "${MEOW_EDGE_INSTALL:-}" == "true" ]]; then
         installed_version="${installed_version}-edge"
         echo ""
-        local branch_name="${MOLE_VERSION:-main}"
+        local branch_name="${MEOW_VERSION:-main}"
         log_warning "Edge version installed on ${branch_name} branch"
         log_info "This is a testing version; use 'mo update' to switch to stable"
     fi

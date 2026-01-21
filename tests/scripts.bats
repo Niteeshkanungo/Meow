@@ -75,6 +75,6 @@ setup() {
 @test "install.sh supports dev branch installs" {
     run bash -c "grep -q 'refs/heads/dev.tar.gz' '$PROJECT_ROOT/install.sh'"
     [ "$status" -eq 0 ]
-    run bash -c "grep -q 'MOLE_VERSION=\"dev\"' '$PROJECT_ROOT/install.sh'"
+    run bash -c "grep -q 'MEOW_VERSION=\"dev\"' '$PROJECT_ROOT/install.sh'"
     [ "$status" -eq 0 ]
 }

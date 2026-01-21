@@ -5,24 +5,24 @@
 set -euo pipefail
 
 # Prevent multiple sourcing
-if [[ -n "${MOLE_FILE_OPS_LOADED:-}" ]]; then
+if [[ -n "${MEOW_FILE_OPS_LOADED:-}" ]]; then
     return 0
 fi
-readonly MOLE_FILE_OPS_LOADED=1
+readonly MEOW_FILE_OPS_LOADED=1
 
 # Ensure dependencies are loaded
-_MOLE_CORE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if [[ -z "${MOLE_BASE_LOADED:-}" ]]; then
+_MEOW_CORE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ -z "${MEOW_BASE_LOADED:-}" ]]; then
     # shellcheck source=lib/core/base.sh
-    source "$_MOLE_CORE_DIR/base.sh"
+    source "$_MEOW_CORE_DIR/base.sh"
 fi
-if [[ -z "${MOLE_LOG_LOADED:-}" ]]; then
+if [[ -z "${MEOW_LOG_LOADED:-}" ]]; then
     # shellcheck source=lib/core/log.sh
-    source "$_MOLE_CORE_DIR/log.sh"
+    source "$_MEOW_CORE_DIR/log.sh"
 fi
-if [[ -z "${MOLE_TIMEOUT_LOADED:-}" ]]; then
+if [[ -z "${MEOW_TIMEOUT_LOADED:-}" ]]; then
     # shellcheck source=lib/core/timeout.sh
-    source "$_MOLE_CORE_DIR/timeout.sh"
+    source "$_MEOW_CORE_DIR/timeout.sh"
 fi
 
 # ============================================================================
@@ -161,7 +161,7 @@ safe_remove() {
     fi
 
     # Dry-run mode: log but don't delete
-    if [[ "${MOLE_DRY_RUN:-0}" == "1" ]]; then
+    if [[ "${MEOW_DRY_RUN:-0}" == "1" ]]; then
         if [[ "${MO_DEBUG:-}" == "1" ]]; then
             local file_type="file"
             [[ -d "$path" ]] && file_type="directory"
@@ -208,9 +208,9 @@ safe_remove() {
     else
         # Check if it's a permission error
         if [[ "$error_msg" == *"Permission denied"* ]] || [[ "$error_msg" == *"Operation not permitted"* ]]; then
-            MOLE_PERMISSION_DENIED_COUNT=${MOLE_PERMISSION_DENIED_COUNT:-0}
-            MOLE_PERMISSION_DENIED_COUNT=$((MOLE_PERMISSION_DENIED_COUNT + 1))
-            export MOLE_PERMISSION_DENIED_COUNT
+            MEOW_PERMISSION_DENIED_COUNT=${MEOW_PERMISSION_DENIED_COUNT:-0}
+            MEOW_PERMISSION_DENIED_COUNT=$((MEOW_PERMISSION_DENIED_COUNT + 1))
+            export MEOW_PERMISSION_DENIED_COUNT
             debug_log "Permission denied: $path (may need Full Disk Access)"
         else
             [[ "$silent" != "true" ]] && log_error "Failed to remove: $path"
@@ -241,7 +241,7 @@ safe_sudo_remove() {
     fi
 
     # Dry-run mode: log but don't delete
-    if [[ "${MOLE_DRY_RUN:-0}" == "1" ]]; then
+    if [[ "${MEOW_DRY_RUN:-0}" == "1" ]]; then
         if [[ "${MO_DEBUG:-}" == "1" ]]; then
             local file_type="file"
             [[ -d "$path" ]] && file_type="directory"

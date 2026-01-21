@@ -1,4 +1,4 @@
-module github.com/tw93/mole
+module github.com/tw93/meow
 
 go 1.24.2
 

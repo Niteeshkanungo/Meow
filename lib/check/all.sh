@@ -167,7 +167,7 @@ check_all_security() {
 # ============================================================================
 
 # Cache configuration
-CACHE_DIR="${HOME}/.cache/mole"
+CACHE_DIR="${HOME}/.cache/meow"
 CACHE_TTL=600 # 10 minutes in seconds
 
 # Ensure cache directory exists
@@ -187,8 +187,8 @@ reset_softwareupdate_cache() {
     SOFTWARE_UPDATE_LIST=""
 }
 
-reset_mole_cache() {
-    clear_cache_file "$CACHE_DIR/mole_version"
+reset_meow_cache() {
+    clear_cache_file "$CACHE_DIR/meow_version"
 }
 
 # Check if cache is still valid
@@ -244,7 +244,7 @@ check_macos_update() {
         local sw_status=0
         local spinner_started=false
         if [[ -t 1 ]]; then
-            MOLE_SPINNER_PREFIX="  " start_inline_spinner "Checking macOS updates..."
+            MEOW_SPINNER_PREFIX="  " start_inline_spinner "Checking macOS updates..."
             spinner_started=true
         fi
 
@@ -282,22 +282,22 @@ check_macos_update() {
     fi
 }
 
-check_mole_update() {
-    if command -v is_whitelisted > /dev/null && is_whitelisted "check_mole_update"; then return; fi
+check_meow_update() {
+    if command -v is_whitelisted > /dev/null && is_whitelisted "check_meow_update"; then return; fi
 
-    # Check if Mole has updates
-    # Auto-detect version from mole main script
+    # Check if Meow has updates
+    # Auto-detect version from cat main script
     local current_version
-    if [[ -f "${SCRIPT_DIR:-/usr/local/bin}/mole" ]]; then
-        current_version=$(grep '^VERSION=' "${SCRIPT_DIR:-/usr/local/bin}/mole" 2> /dev/null | head -1 | sed 's/VERSION="\(.*\)"/\1/' || echo "unknown")
+    if [[ -f "${SCRIPT_DIR:-/usr/local/bin}/cat" ]]; then
+        current_version=$(grep '^VERSION=' "${SCRIPT_DIR:-/usr/local/bin}/cat" 2> /dev/null | head -1 | sed 's/VERSION="\(.*\)"/\1/' || echo "unknown")
     else
         current_version="${VERSION:-unknown}"
     fi
 
     local latest_version=""
-    local cache_file="$CACHE_DIR/mole_version"
+    local cache_file="$CACHE_DIR/meow_version"
 
-    export MOLE_UPDATE_AVAILABLE="false"
+    export MEOW_UPDATE_AVAILABLE="false"
 
     # Check cache first
     if is_cache_valid "$cache_file"; then
@@ -305,15 +305,15 @@ check_mole_update() {
     else
         # Show spinner while checking
         if [[ -t 1 ]]; then
-            MOLE_SPINNER_PREFIX="  " start_inline_spinner "Checking Mole version..."
+            MEOW_SPINNER_PREFIX="  " start_inline_spinner "Checking Meow version..."
         fi
 
         # Try to get latest version from GitHub
         if command -v curl > /dev/null 2>&1; then
             # Run in background to allow Ctrl+C to interrupt
             local temp_version
-            temp_version=$(mktemp_file "mole_version_check")
-            curl -fsSL --connect-timeout 3 --max-time 5 https://api.github.com/repos/tw93/mole/releases/latest 2> /dev/null | grep '"tag_name"' | sed -E 's/.*"v?([^"]+)".*/\1/' > "$temp_version" &
+            temp_version=$(mktemp_file "meow_version_check")
+            curl -fsSL --connect-timeout 3 --max-time 5 https://api.github.com/repos/tw93/meow/releases/latest 2> /dev/null | grep '"tag_name"' | sed -E 's/.*"v?([^"]+)".*/\1/' > "$temp_version" &
             local curl_pid=$!
 
             # Wait for curl to complete (allows Ctrl+C to interrupt)
@@ -343,13 +343,13 @@ check_mole_update() {
     if [[ -n "$latest_version" && "$current_version" != "$latest_version" ]]; then
         # Compare versions
         if [[ "$(printf '%s\n' "$current_version" "$latest_version" | sort -V | head -1)" == "$current_version" ]]; then
-            export MOLE_UPDATE_AVAILABLE="true"
-            echo -e "  ${GRAY}${ICON_WARNING}${NC} Mole         ${YELLOW}${latest_version} available${NC} (running ${current_version})"
+            export MEOW_UPDATE_AVAILABLE="true"
+            echo -e "  ${GRAY}${ICON_WARNING}${NC} Meow         ${YELLOW}${latest_version} available${NC} (running ${current_version})"
         else
-            echo -e "  ${GREEN}✓${NC} Mole         Latest version ${current_version}"
+            echo -e "  ${GREEN}✓${NC} Meow         Latest version ${current_version}"
         fi
     else
-        echo -e "  ${GREEN}✓${NC} Mole         Latest version ${current_version}"
+        echo -e "  ${GREEN}✓${NC} Meow         Latest version ${current_version}"
     fi
 }
 
@@ -364,7 +364,7 @@ check_all_updates() {
     echo -e "${BLUE}${ICON_ARROW}${NC} System Updates"
     check_appstore_updates
     check_macos_update
-    check_mole_update
+    check_meow_update
 }
 
 get_appstore_update_labels() {
@@ -469,7 +469,7 @@ check_login_items() {
     if [[ -t 0 ]]; then
         # Show spinner while getting login items
         if [[ -t 1 ]]; then
-            MOLE_SPINNER_PREFIX="  " start_inline_spinner "Checking login items..."
+            MEOW_SPINNER_PREFIX="  " start_inline_spinner "Checking login items..."
         fi
 
         while IFS= read -r login_item; do
@@ -524,7 +524,7 @@ check_cache_size() {
 
     # Show spinner while calculating cache size
     if [[ -t 1 ]]; then
-        MOLE_SPINNER_PREFIX="  " start_inline_spinner "Scanning cache..."
+        MEOW_SPINNER_PREFIX="  " start_inline_spinner "Scanning cache..."
     fi
 
     for cache_path in "${cache_paths[@]}"; do

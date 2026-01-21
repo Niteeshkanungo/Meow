@@ -4,7 +4,7 @@ set -euo pipefail
 # Preflight TCC prompts once to avoid mid-run interruptions.
 check_tcc_permissions() {
     [[ -t 1 ]] || return 0
-    local permission_flag="$HOME/.cache/mole/permissions_granted"
+    local permission_flag="$HOME/.cache/meow/permissions_granted"
     [[ -f "$permission_flag" ]] && return 0
     local -a tcc_dirs=(
         "$HOME/Library/Caches"
@@ -26,7 +26,7 @@ check_tcc_permissions() {
         echo ""
         echo -ne "${PURPLE}${ICON_ARROW}${NC} Press ${GREEN}Enter${NC} to continue: "
         read -r
-        MOLE_SPINNER_PREFIX="" start_inline_spinner "Requesting permissions..."
+        MEOW_SPINNER_PREFIX="" start_inline_spinner "Requesting permissions..."
         # Touch each directory to trigger prompts without deep scanning.
         for dir in "${tcc_dirs[@]}"; do
             [[ -d "$dir" ]] && command find "$dir" -maxdepth 1 -type d > /dev/null 2>&1
@@ -84,7 +84,7 @@ clean_service_worker_cache() {
         fi
         note_activity
         if [[ "$spinner_was_running" == "true" ]]; then
-            MOLE_SPINNER_PREFIX="  " start_inline_spinner "Scanning browser Service Worker caches..."
+            MEOW_SPINNER_PREFIX="  " start_inline_spinner "Scanning browser Service Worker caches..."
         fi
     fi
 }
@@ -133,7 +133,7 @@ clean_project_caches() {
         )
         local spinner_active=false
         if [[ -t 1 ]]; then
-            MOLE_SPINNER_PREFIX="  "
+            MEOW_SPINNER_PREFIX="  "
             start_inline_spinner "Detecting dev projects..."
             spinner_active=true
         fi
@@ -149,7 +149,7 @@ clean_project_caches() {
         [[ "$has_dev_projects" == "false" ]] && return 0
     fi
     if [[ -t 1 ]]; then
-        MOLE_SPINNER_PREFIX="  "
+        MEOW_SPINNER_PREFIX="  "
         start_inline_spinner "Searching project caches..."
     fi
     local nextjs_tmp_file

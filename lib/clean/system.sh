@@ -5,18 +5,18 @@ set -euo pipefail
 clean_deep_system() {
     stop_section_spinner
     local cache_cleaned=0
-    safe_sudo_find_delete "/Library/Caches" "*.cache" "$MOLE_TEMP_FILE_AGE_DAYS" "f" && cache_cleaned=1 || true
-    safe_sudo_find_delete "/Library/Caches" "*.tmp" "$MOLE_TEMP_FILE_AGE_DAYS" "f" && cache_cleaned=1 || true
-    safe_sudo_find_delete "/Library/Caches" "*.log" "$MOLE_LOG_AGE_DAYS" "f" && cache_cleaned=1 || true
+    safe_sudo_find_delete "/Library/Caches" "*.cache" "$MEOW_TEMP_FILE_AGE_DAYS" "f" && cache_cleaned=1 || true
+    safe_sudo_find_delete "/Library/Caches" "*.tmp" "$MEOW_TEMP_FILE_AGE_DAYS" "f" && cache_cleaned=1 || true
+    safe_sudo_find_delete "/Library/Caches" "*.log" "$MEOW_LOG_AGE_DAYS" "f" && cache_cleaned=1 || true
     [[ $cache_cleaned -eq 1 ]] && log_success "System caches"
     local tmp_cleaned=0
-    safe_sudo_find_delete "/private/tmp" "*" "${MOLE_TEMP_FILE_AGE_DAYS}" "f" && tmp_cleaned=1 || true
-    safe_sudo_find_delete "/private/var/tmp" "*" "${MOLE_TEMP_FILE_AGE_DAYS}" "f" && tmp_cleaned=1 || true
+    safe_sudo_find_delete "/private/tmp" "*" "${MEOW_TEMP_FILE_AGE_DAYS}" "f" && tmp_cleaned=1 || true
+    safe_sudo_find_delete "/private/var/tmp" "*" "${MEOW_TEMP_FILE_AGE_DAYS}" "f" && tmp_cleaned=1 || true
     [[ $tmp_cleaned -eq 1 ]] && log_success "System temp files"
-    safe_sudo_find_delete "/Library/Logs/DiagnosticReports" "*" "$MOLE_CRASH_REPORT_AGE_DAYS" "f" || true
+    safe_sudo_find_delete "/Library/Logs/DiagnosticReports" "*" "$MEOW_CRASH_REPORT_AGE_DAYS" "f" || true
     log_success "System crash reports"
-    safe_sudo_find_delete "/private/var/log" "*.log" "$MOLE_LOG_AGE_DAYS" "f" || true
-    safe_sudo_find_delete "/private/var/log" "*.gz" "$MOLE_LOG_AGE_DAYS" "f" || true
+    safe_sudo_find_delete "/private/var/log" "*.log" "$MEOW_LOG_AGE_DAYS" "f" || true
+    safe_sudo_find_delete "/private/var/log" "*.gz" "$MEOW_LOG_AGE_DAYS" "f" || true
     log_success "System logs"
     if [[ -d "/Library/Updates" && ! -L "/Library/Updates" ]]; then
         if ! is_sip_enabled; then
@@ -82,10 +82,10 @@ clean_deep_system() {
 
     start_section_spinner "Cleaning system diagnostic logs..."
     local diag_cleaned=0
-    safe_sudo_find_delete "/private/var/db/diagnostics/Special" "*" "$MOLE_LOG_AGE_DAYS" "f" && diag_cleaned=1 || true
-    safe_sudo_find_delete "/private/var/db/diagnostics/Persist" "*" "$MOLE_LOG_AGE_DAYS" "f" && diag_cleaned=1 || true
-    safe_sudo_find_delete "/private/var/db/DiagnosticPipeline" "*" "$MOLE_LOG_AGE_DAYS" "f" && diag_cleaned=1 || true
-    safe_sudo_find_delete "/private/var/db/powerlog" "*" "$MOLE_LOG_AGE_DAYS" "f" && diag_cleaned=1 || true
+    safe_sudo_find_delete "/private/var/db/diagnostics/Special" "*" "$MEOW_LOG_AGE_DAYS" "f" && diag_cleaned=1 || true
+    safe_sudo_find_delete "/private/var/db/diagnostics/Persist" "*" "$MEOW_LOG_AGE_DAYS" "f" && diag_cleaned=1 || true
+    safe_sudo_find_delete "/private/var/db/DiagnosticPipeline" "*" "$MEOW_LOG_AGE_DAYS" "f" && diag_cleaned=1 || true
+    safe_sudo_find_delete "/private/var/db/powerlog" "*" "$MEOW_LOG_AGE_DAYS" "f" && diag_cleaned=1 || true
     safe_sudo_find_delete "/private/var/db/reportmemoryexception/MemoryLimitViolations" "*" "30" "f" && diag_cleaned=1 || true
     stop_section_spinner
 
@@ -168,7 +168,7 @@ clean_time_machine_failed_backups() {
                 local current_time
                 current_time=$(get_epoch_seconds)
                 local hours_old=$(((current_time - file_mtime) / 3600))
-                if [[ $hours_old -lt $MOLE_TM_BACKUP_SAFE_HOURS ]]; then
+                if [[ $hours_old -lt $MEOW_TM_BACKUP_SAFE_HOURS ]]; then
                     continue
                 fi
                 local size_kb=$(get_path_size_kb "$inprogress_file")
@@ -214,7 +214,7 @@ clean_time_machine_failed_backups() {
                     local current_time
                     current_time=$(get_epoch_seconds)
                     local hours_old=$(((current_time - file_mtime) / 3600))
-                    if [[ $hours_old -lt $MOLE_TM_BACKUP_SAFE_HOURS ]]; then
+                    if [[ $hours_old -lt $MEOW_TM_BACKUP_SAFE_HOURS ]]; then
                         continue
                     fi
                     local size_kb=$(get_path_size_kb "$inprogress_file")

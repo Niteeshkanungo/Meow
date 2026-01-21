@@ -153,16 +153,16 @@ teardown() {
     [ "$status" -eq 0 ]
 }
 
-@test "MOLE_* constants are defined" {
-    run bash -c "source '$PROJECT_ROOT/lib/core/common.sh'; echo \$MOLE_TEMP_FILE_AGE_DAYS"
+@test "MEOW_* constants are defined" {
+    run bash -c "source '$PROJECT_ROOT/lib/core/common.sh'; echo \$MEOW_TEMP_FILE_AGE_DAYS"
     [ "$status" -eq 0 ]
     [ "$output" = "7" ]
 
-    run bash -c "source '$PROJECT_ROOT/lib/core/common.sh'; echo \$MOLE_MAX_PARALLEL_JOBS"
+    run bash -c "source '$PROJECT_ROOT/lib/core/common.sh'; echo \$MEOW_MAX_PARALLEL_JOBS"
     [ "$status" -eq 0 ]
     [ "$output" = "15" ]
 
-    run bash -c "source '$PROJECT_ROOT/lib/core/common.sh'; echo \$MOLE_TM_BACKUP_SAFE_HOURS"
+    run bash -c "source '$PROJECT_ROOT/lib/core/common.sh'; echo \$MEOW_TM_BACKUP_SAFE_HOURS"
     [ "$status" -eq 0 ]
     [ "$output" = "48" ]
 }

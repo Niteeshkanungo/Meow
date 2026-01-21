@@ -95,7 +95,7 @@ setup() {
 }
 
 @test "ensure_user_dir creates nested directory" {
-    test_dir="$HOME/.config/mole/deep/nested/path"
+    test_dir="$HOME/.config/meow/deep/nested/path"
     bash -c "source '$PROJECT_ROOT/lib/core/base.sh'; ensure_user_dir '$test_dir'"
     [ -d "$test_dir" ]
 }
@@ -128,7 +128,7 @@ setup() {
 
 
 @test "ensure_user_file creates file and parent directories" {
-    test_file="$HOME/.config/mole/test.log"
+    test_file="$HOME/.config/meow/test.log"
     bash -c "source '$PROJECT_ROOT/lib/core/base.sh'; ensure_user_file '$test_file'"
     [ -f "$test_file" ]
     [ -d "$(dirname "$test_file")" ]
@@ -181,7 +181,7 @@ setup() {
 }
 
 @test "ensure_user_dir and ensure_user_file work together" {
-    cache_dir="$HOME/.cache/mole"
+    cache_dir="$HOME/.cache/meow"
     cache_file="$cache_dir/integration_test.log"
 
     bash -c "source '$PROJECT_ROOT/lib/core/base.sh'; ensure_user_dir '$cache_dir'"
@@ -193,14 +193,14 @@ setup() {
 
 @test "multiple ensure_user_file calls in same directory" {
     bash -c "source '$PROJECT_ROOT/lib/core/base.sh'
-        ensure_user_file '$HOME/.config/mole/file1.txt'
-        ensure_user_file '$HOME/.config/mole/file2.txt'
-        ensure_user_file '$HOME/.config/mole/file3.txt'
+        ensure_user_file '$HOME/.config/meow/file1.txt'
+        ensure_user_file '$HOME/.config/meow/file2.txt'
+        ensure_user_file '$HOME/.config/meow/file3.txt'
     "
 
-    [ -f "$HOME/.config/mole/file1.txt" ]
-    [ -f "$HOME/.config/mole/file2.txt" ]
-    [ -f "$HOME/.config/mole/file3.txt" ]
+    [ -f "$HOME/.config/meow/file1.txt" ]
+    [ -f "$HOME/.config/meow/file2.txt" ]
+    [ -f "$HOME/.config/meow/file3.txt" ]
 }
 
 @test "ensure functions handle concurrent calls safely" {

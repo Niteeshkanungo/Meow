@@ -30,13 +30,13 @@ print_header() {
 
 run_system_checks() {
     # Skip checks in dry-run mode.
-    if [[ "${MOLE_DRY_RUN:-0}" == "1" ]]; then
+    if [[ "${MEOW_DRY_RUN:-0}" == "1" ]]; then
         return 0
     fi
 
     unset AUTO_FIX_SUMMARY AUTO_FIX_DETAILS
-    unset MOLE_SECURITY_FIXES_SHOWN
-    unset MOLE_SECURITY_FIXES_SKIPPED
+    unset MEOW_SECURITY_FIXES_SHOWN
+    unset MEOW_SECURITY_FIXES_SKIPPED
     echo ""
 
     check_all_updates
@@ -49,7 +49,7 @@ run_system_checks() {
     if ask_for_security_fixes; then
         perform_security_fixes
     fi
-    if [[ "${MOLE_SECURITY_FIXES_SKIPPED:-}" != "true" ]]; then
+    if [[ "${MEOW_SECURITY_FIXES_SKIPPED:-}" != "true" ]]; then
         echo ""
     fi
 
@@ -77,7 +77,7 @@ show_optimization_summary() {
     local -a summary_details=()
     local total_applied=$((safe_count + confirm_count))
 
-    if [[ "${MOLE_DRY_RUN:-0}" == "1" ]]; then
+    if [[ "${MEOW_DRY_RUN:-0}" == "1" ]]; then
         summary_title="Dry Run Complete - No Changes Made"
         summary_details+=("Would apply ${YELLOW}${total_applied:-0}${NC} optimizations")
         summary_details+=("Run without ${YELLOW}--dry-run${NC} to apply these changes")
@@ -276,12 +276,12 @@ ask_for_security_fixes() {
         echo -e "  ${ICON_LIST} $label"
     done
     echo ""
-    export MOLE_SECURITY_FIXES_SHOWN=true
+    export MEOW_SECURITY_FIXES_SHOWN=true
     echo -ne "${YELLOW}Apply now?${NC} ${GRAY}Enter confirm / Space cancel${NC}: "
 
     local key
     if ! key=$(read_key); then
-        export MOLE_SECURITY_FIXES_SKIPPED=true
+        export MEOW_SECURITY_FIXES_SKIPPED=true
         echo -e "\n  ${GRAY}${ICON_WARNING}${NC} Security fixes skipped"
         echo ""
         return 1
@@ -291,7 +291,7 @@ ask_for_security_fixes() {
         echo ""
         return 0
     else
-        export MOLE_SECURITY_FIXES_SKIPPED=true
+        export MEOW_SECURITY_FIXES_SKIPPED=true
         echo -e "\n  ${GRAY}${ICON_WARNING}${NC} Security fixes skipped"
         echo ""
         return 1
@@ -372,7 +372,7 @@ main() {
                 export MO_DEBUG=1
                 ;;
             "--dry-run")
-                export MOLE_DRY_RUN=1
+                export MEOW_DRY_RUN=1
                 ;;
             "--whitelist")
                 manage_whitelist "optimize"
@@ -390,7 +390,7 @@ main() {
     print_header
 
     # Dry-run indicator.
-    if [[ "${MOLE_DRY_RUN:-0}" == "1" ]]; then
+    if [[ "${MEOW_DRY_RUN:-0}" == "1" ]]; then
         echo -e "${YELLOW}${ICON_DRY_RUN} DRY RUN MODE${NC} - No files will be modified\n"
     fi
 
@@ -472,7 +472,7 @@ main() {
     done < "$opts_file"
 
     echo ""
-    if [[ "${MOLE_DRY_RUN:-0}" != "1" ]]; then
+    if [[ "${MEOW_DRY_RUN:-0}" != "1" ]]; then
         ensure_sudo_session "System optimization requires admin access" || true
     fi
 

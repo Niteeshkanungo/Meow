@@ -59,7 +59,7 @@ readonly DEFAULT_PURGE_SEARCH_PATHS=(
 )
 
 # Config file for custom purge paths.
-readonly PURGE_CONFIG_FILE="$HOME/.config/mole/purge_paths"
+readonly PURGE_CONFIG_FILE="$HOME/.config/meow/purge_paths"
 
 # Resolved search paths.
 PURGE_SEARCH_PATHS=()

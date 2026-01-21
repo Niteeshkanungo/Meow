@@ -24,11 +24,11 @@ setup() {
     export TERM="xterm-256color"
     rm -rf "${HOME:?}"/*
     rm -rf "$HOME/Library" "$HOME/.config"
-    mkdir -p "$HOME/Library/Caches" "$HOME/.config/mole"
+    mkdir -p "$HOME/Library/Caches" "$HOME/.config/meow"
 }
 
 @test "mo clean --dry-run skips system cleanup in non-interactive mode" {
-    run env HOME="$HOME" MOLE_TEST_MODE=1 "$PROJECT_ROOT/mole" clean --dry-run
+    run env HOME="$HOME" MEOW_TEST_MODE=1 "$PROJECT_ROOT/mole" clean --dry-run
     [ "$status" -eq 0 ]
     [[ "$output" == *"Dry Run Mode"* ]]
     [[ "$output" != *"Deep system-level cleanup"* ]]
@@ -38,7 +38,7 @@ setup() {
     mkdir -p "$HOME/Library/Caches/TestApp"
     echo "cache data" > "$HOME/Library/Caches/TestApp/cache.tmp"
 
-    run env HOME="$HOME" MOLE_TEST_MODE=1 "$PROJECT_ROOT/mole" clean --dry-run
+    run env HOME="$HOME" MEOW_TEST_MODE=1 "$PROJECT_ROOT/mole" clean --dry-run
     [ "$status" -eq 0 ]
     [[ "$output" == *"User app cache"* ]]
     [[ "$output" == *"Potential space"* ]]
@@ -49,11 +49,11 @@ setup() {
     mkdir -p "$HOME/Library/Caches/WhitelistedApp"
     echo "keep me" > "$HOME/Library/Caches/WhitelistedApp/data.tmp"
 
-    cat > "$HOME/.config/mole/whitelist" << EOF
+    cat > "$HOME/.config/meow/whitelist" << EOF
 $HOME/Library/Caches/WhitelistedApp*
 EOF
 
-    run env HOME="$HOME" MOLE_TEST_MODE=1 "$PROJECT_ROOT/mole" clean --dry-run
+    run env HOME="$HOME" MEOW_TEST_MODE=1 "$PROJECT_ROOT/mole" clean --dry-run
     [ "$status" -eq 0 ]
     [[ "$output" == *"Protected"* ]]
     [ -f "$HOME/Library/Caches/WhitelistedApp/data.tmp" ]
@@ -63,11 +63,11 @@ EOF
     mkdir -p "$HOME/Library/Caches/WhitelistedApp"
     echo "keep me" > "$HOME/Library/Caches/WhitelistedApp/data.tmp"
 
-    cat > "$HOME/.config/mole/whitelist" << 'EOF'
+    cat > "$HOME/.config/meow/whitelist" << 'EOF'
 $HOME/Library/Caches/WhitelistedApp*
 EOF
 
-    run env HOME="$HOME" MOLE_TEST_MODE=1 "$PROJECT_ROOT/mole" clean --dry-run
+    run env HOME="$HOME" MEOW_TEST_MODE=1 "$PROJECT_ROOT/mole" clean --dry-run
     [ "$status" -eq 0 ]
     [[ "$output" == *"Protected"* ]]
     [ -f "$HOME/Library/Caches/WhitelistedApp/data.tmp" ]
@@ -77,7 +77,7 @@ EOF
     mkdir -p "$HOME/.m2/repository/org/example"
     echo "dependency" > "$HOME/.m2/repository/org/example/lib.jar"
 
-    run env HOME="$HOME" MOLE_TEST_MODE=1 "$PROJECT_ROOT/mole" clean --dry-run
+    run env HOME="$HOME" MEOW_TEST_MODE=1 "$PROJECT_ROOT/mole" clean --dry-run
     [ "$status" -eq 0 ]
     [ -f "$HOME/.m2/repository/org/example/lib.jar" ]
     [[ "$output" != *"Maven repository cache"* ]]
@@ -87,7 +87,7 @@ EOF
     mkdir -p "$HOME/Documents"
     touch "$HOME/Documents/.DS_Store"
 
-    cat > "$HOME/.config/mole/whitelist" << EOF
+    cat > "$HOME/.config/meow/whitelist" << EOF
 FINDER_METADATA_SENTINEL
 EOF
 

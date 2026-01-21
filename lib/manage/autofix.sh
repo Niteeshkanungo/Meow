@@ -11,7 +11,7 @@ show_suggestions() {
     local -a auto_fix_items=()
     local -a manual_items=()
     local skip_security_autofix=false
-    if [[ "${MOLE_SECURITY_FIXES_SHOWN:-}" == "true" ]]; then
+    if [[ "${MEOW_SECURITY_FIXES_SHOWN:-}" == "true" ]]; then
         skip_security_autofix=true
     fi
 
