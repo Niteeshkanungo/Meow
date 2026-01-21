@@ -1,5 +1,5 @@
 #!/bin/bash
-# Lightweight alias to run Meow via `mo`
+# Lightweight alias to run Meow via `meow`
 
 set -euo pipefail
 

@@ -44,48 +44,48 @@ curl -fsSL https://raw.githubusercontent.com/tw93/meow/main/install.sh | bash
 **Run:**
 
 ```bash
-mo                           # Interactive menu
-mo clean                     # Deep cleanup
-mo uninstall                 # Remove apps + leftovers
-mo optimize                  # Refresh caches & services
-mo analyze                   # Visual disk explorer
-mo status                    # Live system health dashboard
-mo purge                     # Clean project build artifacts
-mo installer                 # Find and remove installer files
+meow                           # Interactive menu
+meow clean                     # Deep cleanup
+meow uninstall                 # Remove apps + leftovers
+meow optimize                  # Refresh caches & services
+meow analyze                   # Visual disk explorer
+meow status                    # Live system health dashboard
+meow purge                     # Clean project build artifacts
+meow installer                 # Find and remove installer files
 
-mo touchid                   # Configure Touch ID for sudo
-mo completion                # Set up shell tab completion
-mo update                    # Update Meow
-mo remove                    # Remove Meow from system
-mo --help                    # Show help
-mo --version                 # Show installed version
+meow touchid                   # Configure Touch ID for sudo
+meow completion                # Set up shell tab completion
+meow update                    # Update Meow
+meow remove                    # Remove Meow from system
+meow --help                    # Show help
+meow --version                 # Show installed version
 
-mo clean --dry-run           # Preview the cleanup plan
-mo clean --whitelist         # Manage protected caches
-mo clean --dry-run --debug   # Detailed preview with risk levels and file info
+meow clean --dry-run           # Preview the cleanup plan
+meow clean --whitelist         # Manage protected caches
+meow clean --dry-run --debug   # Detailed preview with risk levels and file info
 
-mo optimize --dry-run        # Preview optimization actions
-mo optimize --debug          # Run with detailed operation logs
-mo optimize --whitelist      # Manage protected optimization rules
-mo purge --paths             # Configure project scan directories
+meow optimize --dry-run        # Preview optimization actions
+meow optimize --debug          # Run with detailed operation logs
+meow optimize --whitelist      # Manage protected optimization rules
+meow purge --paths             # Configure project scan directories
 ```
 
 ## Tips
 
 - **Terminal**: iTerm2 has known compatibility issues; we recommend Alacritty, kitty, WezTerm, Ghostty, or Warp.
-- **Safety**: Built with strict protections. See [Security Audit](SECURITY_AUDIT.md). Preview changes with `mo clean --dry-run`.
+- **Safety**: Built with strict protections. See [Security Audit](SECURITY_AUDIT.md). Preview changes with `meow clean --dry-run`.
 - **Be Careful**: Although safe by design, file deletion is permanent. Please review operations carefully.
-- **Debug Mode**: Use `--debug` for detailed logs (e.g., `mo clean --debug`). Combine with `--dry-run` for comprehensive preview including risk levels and file details.
+- **Debug Mode**: Use `--debug` for detailed logs (e.g., `meow clean --debug`). Combine with `--dry-run` for comprehensive preview including risk levels and file details.
 - **Navigation**: Supports arrow keys and Vim bindings (`h/j/k/l`).
-- **Status Shortcuts**: In `mo status`, press `k` to toggle cat visibility and save preference, `q` to quit.
-- **Configuration**: Run `mo touchid` for Touch ID sudo, `mo completion` for shell tab completion, `mo clean --whitelist` to manage protected paths.
+- **Status Shortcuts**: In `meow status`, press `k` to toggle cat visibility and save preference, `q` to quit.
+- **Configuration**: Run `meow touchid` for Touch ID sudo, `meow completion` for shell tab completion, `meow clean --whitelist` to manage protected paths.
 
 ## Features in Detail
 
 ### Deep System Cleanup
 
 ```bash
-$ mo clean
+$ meow clean
 
 Scanning cache directories...
 
@@ -104,7 +104,7 @@ Space freed: 95.5GB | Free space now: 223.5GB
 ### Smart App Uninstaller
 
 ```bash
-$ mo uninstall
+$ meow uninstall
 
 Select Apps to Remove
 ═══════════════════════════
@@ -128,7 +128,7 @@ Space freed: 12.8GB
 ### System Optimization
 
 ```bash
-$ mo optimize
+$ meow optimize
 
 System: 5/32 GB RAM | 333/460 GB Disk (72%) | Uptime 6d
 
@@ -143,13 +143,13 @@ System: 5/32 GB RAM | 333/460 GB Disk (72%) | Uptime 6d
 System optimization completed
 ====================================================================
 
-Use `mo optimize --whitelist` to exclude specific optimizations.
+Use `meow optimize --whitelist` to exclude specific optimizations.
 ```
 
 ### Disk Space Analyzer
 
 ```bash
-$ mo analyze
+$ meow analyze
 
 Analyze Disk  ~/Documents  |  Total: 156.8GB
 
@@ -167,7 +167,7 @@ Analyze Disk  ~/Documents  |  Total: 156.8GB
 Real-time dashboard with system health score, hardware info, and performance metrics.
 
 ```bash
-$ mo status
+$ meow status
 
 Meow Status  Health ● 92  MacBook Pro · M4 Pro · 32GB · macOS 14.5
 
@@ -196,7 +196,7 @@ Health score based on CPU, memory, disk, temperature, and I/O load. Color-coded 
 Clean old build artifacts (`node_modules`, `target`, `build`, `dist`, etc.) from your projects to free up disk space.
 
 ```bash
-mo purge
+meow purge
 
 Select Categories to Clean - 18.5GB (8 selected)
 
@@ -215,7 +215,7 @@ Select Categories to Clean - 18.5GB (8 selected)
 <details>
 <summary><strong>Custom Scan Paths</strong></summary>
 
-Run `mo purge --paths` to configure which directories to scan, or edit `~/.config/meow/purge_paths` directly:
+Run `meow purge --paths` to configure which directories to scan, or edit `~/.config/meow/purge_paths` directly:
 
 ```shell
 ~/Documents/MyProjects
@@ -232,7 +232,7 @@ When custom paths are configured, only those directories are scanned. Otherwise,
 Find and remove large installer files scattered across Downloads, Desktop, Homebrew caches, iCloud, and Mail. Each file is labeled by source to help you know where the space is hiding.
 
 ```bash
-mo installer
+meow installer
 
 Select Installers to Remove - 3.8GB (5 selected)
 

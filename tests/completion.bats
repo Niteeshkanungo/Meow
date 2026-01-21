@@ -56,7 +56,7 @@ setup() {
     run "$PROJECT_ROOT/bin/completion.sh" bash
     [ "$status" -eq 0 ]
     [[ "$output" == *"_mole_completions"* ]]
-    [[ "$output" == *"complete -F _mole_completions mole mo"* ]]
+    [[ "$output" == *"complete -F _meow_completions cat meow"* ]]
 }
 
 @test "completion bash script includes all commands" {
@@ -72,10 +72,10 @@ setup() {
     [[ "$output" == *"completion"* ]]
 }
 
-@test "completion bash script supports mo command" {
+@test "completion bash script supports meow command" {
     run "$PROJECT_ROOT/bin/completion.sh" bash
     [ "$status" -eq 0 ]
-    [[ "$output" == *"complete -F _mole_completions mole mo"* ]]
+    [[ "$output" == *"complete -F _meow_completions cat meow"* ]]
 }
 
 @test "completion bash can be loaded in bash" {
@@ -87,7 +87,7 @@ setup() {
 @test "completion zsh generates valid zsh script" {
     run "$PROJECT_ROOT/bin/completion.sh" zsh
     [ "$status" -eq 0 ]
-    [[ "$output" == *"#compdef mole mo"* ]]
+    [[ "$output" == *"#compdef cat meow"* ]]
     [[ "$output" == *"_mole()"* ]]
 }
 
@@ -101,14 +101,14 @@ setup() {
 @test "completion fish generates valid fish script" {
     run "$PROJECT_ROOT/bin/completion.sh" fish
     [ "$status" -eq 0 ]
-    [[ "$output" == *"complete -c mole"* ]]
-    [[ "$output" == *"complete -c mo"* ]]
+    [[ "$output" == *"complete -c meowle"* ]]
+    [[ "$output" == *"complete -c meow"* ]]
 }
 
-@test "completion fish includes both mole and mo commands" {
+@test "completion fish includes both cat and meow commands" {
     output="$("$PROJECT_ROOT/bin/completion.sh" fish)"
-    mole_count=$(echo "$output" | grep -c "complete -c mole")
-    mo_count=$(echo "$output" | grep -c "complete -c mo")
+    mole_count=$(echo "$output" | grep -c "complete -c meowle")
+    mo_count=$(echo "$output" | grep -c "complete -c meow")
 
     [ "$mole_count" -gt 0 ]
     [ "$mo_count" -gt 0 ]

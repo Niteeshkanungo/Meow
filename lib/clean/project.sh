@@ -1,5 +1,5 @@
 #!/bin/bash
-# Project Purge Module (mo purge).
+# Project Purge Module (meow purge).
 # Removes heavy project build artifacts and dependencies.
 set -euo pipefail
 
@@ -167,7 +167,7 @@ save_discovered_paths() {
 
     cat > "$PURGE_CONFIG_FILE" << 'EOF'
 # Mole Purge Paths - Auto-discovered project directories
-# Edit this file to customize, or run: mo purge --paths
+# Edit this file to customize, or run: meow purge --paths
 # Add one path per line (supports ~ for home directory)
 EOF
 

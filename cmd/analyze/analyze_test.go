@@ -247,7 +247,7 @@ func TestIsCleanableDir(t *testing.T) {
 		t.Fatalf("expected node_modules to be cleanable")
 	}
 	if isCleanableDir("/Users/test/Library/Caches/AppCache") {
-		t.Fatalf("Library caches should be handled by mo clean")
+		t.Fatalf("Library caches should be handled by meow clean")
 	}
 	if isCleanableDir("") {
 		t.Fatalf("empty path should not be cleanable")

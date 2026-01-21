@@ -713,7 +713,7 @@ start_cleanup() {
 #
 # How to protect files:
 # 1. Copy any path below to ~/.config/meow/whitelist
-# 2. Run: mo clean --whitelist
+# 2. Run: meow clean --whitelist
 #
 # Example:
 #   /Users/*/Library/Caches/com.example.app
@@ -1002,7 +1002,7 @@ perform_cleanup() {
             } >> "$EXPORT_LIST_FILE"
 
             summary_details+=("Detailed file list: ${GRAY}$EXPORT_LIST_FILE${NC}")
-            summary_details+=("Use ${GRAY}mo clean --whitelist${NC} to add protection rules")
+            summary_details+=("Use ${GRAY}meow clean --whitelist${NC} to add protection rules")
         else
             local summary_line="Space freed: ${GREEN}${freed_gb}GB${NC}"
 

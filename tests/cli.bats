@@ -49,21 +49,21 @@ setup() {
     mkdir -p "$HOME"
 }
 
-@test "mole --help prints command overview" {
+@test "meowle --help prints command overview" {
     run env HOME="$HOME" "$PROJECT_ROOT/mole" --help
     [ "$status" -eq 0 ]
-    [[ "$output" == *"mo clean"* ]]
-    [[ "$output" == *"mo analyze"* ]]
+    [[ "$output" == *"meow clean"* ]]
+    [[ "$output" == *"meow analyze"* ]]
 }
 
-@test "mole --version reports script version" {
+@test "meowle --version reports script version" {
     expected_version="$(grep '^VERSION=' "$PROJECT_ROOT/mole" | head -1 | sed 's/VERSION=\"\(.*\)\"/\1/')"
     run env HOME="$HOME" "$PROJECT_ROOT/mole" --version
     [ "$status" -eq 0 ]
     [[ "$output" == *"$expected_version"* ]]
 }
 
-@test "mole unknown command returns error" {
+@test "meowle unknown command returns error" {
     run env HOME="$HOME" "$PROJECT_ROOT/mole" unknown-command
     [ "$status" -ne 0 ]
     [[ "$output" == *"Unknown command: unknown-command"* ]]
@@ -75,12 +75,12 @@ setup() {
     [[ "$output" == *"Touch ID"* ]]
 }
 
-@test "mo optimize command is recognized" {
+@test "meow optimize command is recognized" {
     run bash -c "grep -q '\"optimize\")' '$PROJECT_ROOT/mole'"
     [ "$status" -eq 0 ]
 }
 
-@test "mo analyze binary is valid" {
+@test "meow analyze binary is valid" {
     if [[ -f "$PROJECT_ROOT/bin/analyze-go" ]]; then
         [ -x "$PROJECT_ROOT/bin/analyze-go" ]
         run file "$PROJECT_ROOT/bin/analyze-go"
@@ -90,7 +90,7 @@ setup() {
     fi
 }
 
-@test "mo clean --debug creates debug log file" {
+@test "meow clean --debug creates debug log file" {
     mkdir -p "$HOME/.config/meow"
     run env HOME="$HOME" TERM="xterm-256color" MEOW_TEST_MODE=1 MO_DEBUG=1 "$PROJECT_ROOT/mole" clean --dry-run
     [ "$status" -eq 0 ]
@@ -105,7 +105,7 @@ setup() {
     [[ "$MEOW_OUTPUT" =~ "Debug session log saved to" ]]
 }
 
-@test "mo clean without debug does not show debug log path" {
+@test "meow clean without debug does not show debug log path" {
     mkdir -p "$HOME/.config/meow"
     run env HOME="$HOME" TERM="xterm-256color" MEOW_TEST_MODE=1 MO_DEBUG=0 "$PROJECT_ROOT/mole" clean --dry-run
     [ "$status" -eq 0 ]
@@ -113,7 +113,7 @@ setup() {
     [[ "$output" != *"Debug session log saved to"* ]]
 }
 
-@test "mo clean --debug logs system info" {
+@test "meow clean --debug logs system info" {
     mkdir -p "$HOME/.config/meow"
     run env HOME="$HOME" TERM="xterm-256color" MEOW_TEST_MODE=1 MO_DEBUG=1 "$PROJECT_ROOT/mole" clean --dry-run
     [ "$status" -eq 0 ]

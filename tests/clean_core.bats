@@ -27,14 +27,14 @@ setup() {
     mkdir -p "$HOME/Library/Caches" "$HOME/.config/meow"
 }
 
-@test "mo clean --dry-run skips system cleanup in non-interactive mode" {
+@test "meow clean --dry-run skips system cleanup in non-interactive mode" {
     run env HOME="$HOME" MEOW_TEST_MODE=1 "$PROJECT_ROOT/mole" clean --dry-run
     [ "$status" -eq 0 ]
     [[ "$output" == *"Dry Run Mode"* ]]
     [[ "$output" != *"Deep system-level cleanup"* ]]
 }
 
-@test "mo clean --dry-run reports user cache without deleting it" {
+@test "meow clean --dry-run reports user cache without deleting it" {
     mkdir -p "$HOME/Library/Caches/TestApp"
     echo "cache data" > "$HOME/Library/Caches/TestApp/cache.tmp"
 
@@ -45,7 +45,7 @@ setup() {
     [ -f "$HOME/Library/Caches/TestApp/cache.tmp" ]
 }
 
-@test "mo clean honors whitelist entries" {
+@test "meow clean honors whitelist entries" {
     mkdir -p "$HOME/Library/Caches/WhitelistedApp"
     echo "keep me" > "$HOME/Library/Caches/WhitelistedApp/data.tmp"
 
@@ -59,7 +59,7 @@ EOF
     [ -f "$HOME/Library/Caches/WhitelistedApp/data.tmp" ]
 }
 
-@test "mo clean honors whitelist entries with $HOME literal" {
+@test "meow clean honors whitelist entries with $HOME literal" {
     mkdir -p "$HOME/Library/Caches/WhitelistedApp"
     echo "keep me" > "$HOME/Library/Caches/WhitelistedApp/data.tmp"
 
@@ -73,7 +73,7 @@ EOF
     [ -f "$HOME/Library/Caches/WhitelistedApp/data.tmp" ]
 }
 
-@test "mo clean protects Maven repository by default" {
+@test "meow clean protects Maven repository by default" {
     mkdir -p "$HOME/.m2/repository/org/example"
     echo "dependency" > "$HOME/.m2/repository/org/example/lib.jar"
 

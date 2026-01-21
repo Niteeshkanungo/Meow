@@ -254,7 +254,7 @@ normalize_release_tag() {
 }
 
 get_installed_version() {
-    local binary="$INSTALL_DIR/mole"
+    local binary="$INSTALL_DIR/meowle"
     if [[ -x "$binary" ]]; then
         local version
         version=$("$binary" --version 2> /dev/null | awk '/Mole version/ {print $NF; exit}')
@@ -537,9 +537,9 @@ install_files() {
             fi
 
             # Atomic update: copy to temporary name first, then move
-            maybe_sudo cp "$SOURCE_DIR/mole" "$INSTALL_DIR/mole.new"
-            maybe_sudo chmod +x "$INSTALL_DIR/mole.new"
-            maybe_sudo mv -f "$INSTALL_DIR/mole.new" "$INSTALL_DIR/mole"
+            maybe_sudo cp "$SOURCE_DIR/mole" "$INSTALL_DIR/meowle.new"
+            maybe_sudo chmod +x "$INSTALL_DIR/meowle.new"
+            maybe_sudo mv -f "$INSTALL_DIR/meowle.new" "$INSTALL_DIR/meowle"
 
             log_success "Installed mole to $INSTALL_DIR"
         fi
@@ -548,14 +548,14 @@ install_files() {
         exit 1
     fi
 
-    if [[ -f "$SOURCE_DIR/mo" ]]; then
+    if [[ -f "$SOURCE_DIR/meow" ]]; then
         if [[ "$source_dir_abs" == "$install_dir_abs" ]]; then
-            log_success "mo alias already present"
+            log_success "meow alias already present"
         else
-            maybe_sudo cp "$SOURCE_DIR/mo" "$INSTALL_DIR/mo.new"
-            maybe_sudo chmod +x "$INSTALL_DIR/mo.new"
-            maybe_sudo mv -f "$INSTALL_DIR/mo.new" "$INSTALL_DIR/mo"
-            log_success "Installed mo alias"
+            maybe_sudo cp "$SOURCE_DIR/meow" "$INSTALL_DIR/meow.new"
+            maybe_sudo chmod +x "$INSTALL_DIR/meow.new"
+            maybe_sudo mv -f "$INSTALL_DIR/meow.new" "$INSTALL_DIR/meow"
+            log_success "Installed meow alias"
         fi
     fi
 
@@ -603,7 +603,7 @@ install_files() {
     fi
 
     if [[ "$source_dir_abs" != "$install_dir_abs" ]]; then
-        maybe_sudo sed -i '' "s|SCRIPT_DIR=.*|SCRIPT_DIR=\"$CONFIG_DIR\"|" "$INSTALL_DIR/mole"
+        maybe_sudo sed -i '' "s|SCRIPT_DIR=.*|SCRIPT_DIR=\"$CONFIG_DIR\"|" "$INSTALL_DIR/meowle"
     fi
 
     if ! download_binary "analyze"; then
@@ -617,9 +617,9 @@ install_files() {
 # Verification and PATH hint
 verify_installation() {
 
-    if [[ -x "$INSTALL_DIR/mole" ]] && [[ -f "$CONFIG_DIR/lib/core/common.sh" ]]; then
+    if [[ -x "$INSTALL_DIR/meowle" ]] && [[ -f "$CONFIG_DIR/lib/core/common.sh" ]]; then
 
-        if "$INSTALL_DIR/mole" --help > /dev/null 2>&1; then
+        if "$INSTALL_DIR/meowle" --help > /dev/null 2>&1; then
             return 0
         else
             log_warning "Mole command installed but may not be working properly"
@@ -669,25 +669,25 @@ print_usage_summary() {
     echo ""
     echo "Usage:"
     if [[ ":$PATH:" == *":$INSTALL_DIR:"* ]]; then
-        echo "  mo                           # Interactive menu"
-        echo "  mo clean                     # Deep cleanup"
-        echo "  mo uninstall                 # Remove apps + leftovers"
-        echo "  mo optimize                  # Check and maintain system"
-        echo "  mo analyze                   # Explore disk usage"
-        echo "  mo status                    # Monitor system health"
-        echo "  mo touchid                   # Configure Touch ID for sudo"
-        echo "  mo update                    # Update to latest version"
-        echo "  mo --help                    # Show all commands"
+        echo "  meow                           # Interactive menu"
+        echo "  meow clean                     # Deep cleanup"
+        echo "  meow uninstall                 # Remove apps + leftovers"
+        echo "  meow optimize                  # Check and maintain system"
+        echo "  meow analyze                   # Explore disk usage"
+        echo "  meow status                    # Monitor system health"
+        echo "  meow touchid                   # Configure Touch ID for sudo"
+        echo "  meow update                    # Update to latest version"
+        echo "  meow --help                    # Show all commands"
     else
-        echo "  $INSTALL_DIR/mo                           # Interactive menu"
-        echo "  $INSTALL_DIR/mo clean                     # Deep cleanup"
-        echo "  $INSTALL_DIR/mo uninstall                 # Remove apps + leftovers"
-        echo "  $INSTALL_DIR/mo optimize                  # Check and maintain system"
-        echo "  $INSTALL_DIR/mo analyze                   # Explore disk usage"
-        echo "  $INSTALL_DIR/mo status                    # Monitor system health"
-        echo "  $INSTALL_DIR/mo touchid                   # Configure Touch ID for sudo"
-        echo "  $INSTALL_DIR/mo update                    # Update to latest version"
-        echo "  $INSTALL_DIR/mo --help                    # Show all commands"
+        echo "  $INSTALL_DIR/meow                           # Interactive menu"
+        echo "  $INSTALL_DIR/meow clean                     # Deep cleanup"
+        echo "  $INSTALL_DIR/meow uninstall                 # Remove apps + leftovers"
+        echo "  $INSTALL_DIR/meow optimize                  # Check and maintain system"
+        echo "  $INSTALL_DIR/meow analyze                   # Explore disk usage"
+        echo "  $INSTALL_DIR/meow status                    # Monitor system health"
+        echo "  $INSTALL_DIR/meow touchid                   # Configure Touch ID for sudo"
+        echo "  $INSTALL_DIR/meow update                    # Update to latest version"
+        echo "  $INSTALL_DIR/meow --help                    # Show all commands"
     fi
     echo ""
 }
@@ -717,7 +717,7 @@ perform_install() {
         echo ""
         local branch_name="${MEOW_VERSION:-main}"
         log_warning "Edge version installed on ${branch_name} branch"
-        log_info "This is a testing version; use 'mo update' to switch to stable"
+        log_info "This is a testing version; use 'meow update' to switch to stable"
     fi
 
     print_usage_summary "installed" "$installed_version"

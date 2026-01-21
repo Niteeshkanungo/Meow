@@ -207,22 +207,22 @@ show_help() {
     show_brand_banner
     echo
     printf "%s%s%s\n" "$BLUE" "COMMANDS" "$NC"
-    printf "  %s%-28s%s %s\n" "$GREEN" "mo" "$NC" "Main menu"
+    printf "  %s%-28s%s %s\n" "$GREEN" "meow" "$NC" "Main menu"
     for entry in "${MEOW_COMMANDS[@]}"; do
         local name="${entry%%:*}"
         local desc="${entry#*:}"
-        local display="mo $name"
-        [[ "$name" == "help" ]] && display="mo --help"
-        [[ "$name" == "version" ]] && display="mo --version"
+        local display="meow $name"
+        [[ "$name" == "help" ]] && display="meow --help"
+        [[ "$name" == "version" ]] && display="meow --version"
         printf "  %s%-28s%s %s\n" "$GREEN" "$display" "$NC" "$desc"
     done
     echo
-    printf "  %s%-28s%s %s\n" "$GREEN" "mo clean --dry-run" "$NC" "Preview cleanup"
-    printf "  %s%-28s%s %s\n" "$GREEN" "mo clean --whitelist" "$NC" "Manage protected caches"
+    printf "  %s%-28s%s %s\n" "$GREEN" "meow clean --dry-run" "$NC" "Preview cleanup"
+    printf "  %s%-28s%s %s\n" "$GREEN" "meow clean --whitelist" "$NC" "Manage protected caches"
 
-    printf "  %s%-28s%s %s\n" "$GREEN" "mo optimize --dry-run" "$NC" "Preview optimization"
-    printf "  %s%-28s%s %s\n" "$GREEN" "mo optimize --whitelist" "$NC" "Manage protected items"
-    printf "  %s%-28s%s %s\n" "$GREEN" "mo purge --paths" "$NC" "Configure scan directories"
+    printf "  %s%-28s%s %s\n" "$GREEN" "meow optimize --dry-run" "$NC" "Preview optimization"
+    printf "  %s%-28s%s %s\n" "$GREEN" "meow optimize --whitelist" "$NC" "Manage protected items"
+    printf "  %s%-28s%s %s\n" "$GREEN" "meow purge --paths" "$NC" "Configure scan directories"
     echo
     printf "%s%s%s\n" "$BLUE" "OPTIONS" "$NC"
     printf "  %s%-28s%s %s\n" "$GREEN" "--debug" "$NC" "Show detailed operation logs"
@@ -246,7 +246,7 @@ update_meow() {
     if [[ -z "$latest" ]]; then
         log_error "Unable to check for updates. Check network connection."
         echo -e "${YELLOW}Tip:${NC} Check if you can access GitHub (https://github.com)"
-        echo -e "${YELLOW}Tip:${NC} Try again with: ${GRAY}mo update${NC}"
+            echo -e "${YELLOW}Tip:${NC} Try again with: ${GRAY}meow update${NC}"
         exit 1
     fi
 
@@ -431,20 +431,20 @@ remove_meow() {
         fi
     done
 
-    local found_mo
-    found_mo=$(command -v mo 2> /dev/null || true)
-    if [[ -n "$found_mo" && -f "$found_mo" ]]; then
-        alias_installs+=("$found_mo")
+    local found_meow
+    found_meow=$(command -v meow 2> /dev/null || true)
+    if [[ -n "$found_meow" && -f "$found_meow" ]]; then
+        alias_installs+=("$found_meow")
     fi
 
     local -a alias_fallback=(
-        "/usr/local/bin/mo"
-        "$HOME/.local/bin/mo"
-        "/opt/local/bin/mo"
+        "/usr/local/bin/meow"
+        "$HOME/.local/bin/meow"
+        "/opt/local/bin/meow"
     )
 
     for alias in "${alias_fallback[@]}"; do
-        if [[ -f "$alias" && "$alias" != "$found_mo" ]]; then
+        if [[ -f "$alias" && "$alias" != "$found_meow" ]]; then
             alias_installs+=("$alias")
         fi
     done

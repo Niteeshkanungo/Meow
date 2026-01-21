@@ -224,8 +224,8 @@ EOF
 
 @test "remove_mole deletes manual binaries and caches" {
     mkdir -p "$HOME/.local/bin"
-    touch "$HOME/.local/bin/mole"
-    touch "$HOME/.local/bin/mo"
+    touch "$HOME/.local/bin/meowle"
+    touch "$HOME/.local/bin/meow"
     mkdir -p "$HOME/.config/meow" "$HOME/.cache/meow"
 
     run env HOME="$HOME" PROJECT_ROOT="$PROJECT_ROOT" PATH="/usr/bin:/bin" bash --noprofile --norc << 'EOF'
@@ -264,8 +264,8 @@ printf '\n' | "$PROJECT_ROOT/mole" remove
 EOF
 
     [ "$status" -eq 0 ]
-    [ ! -f "$HOME/.local/bin/mole" ]
-    [ ! -f "$HOME/.local/bin/mo" ]
+    [ ! -f "$HOME/.local/bin/meowle" ]
+    [ ! -f "$HOME/.local/bin/meow" ]
     [ ! -d "$HOME/.config/meow" ]
     [ ! -d "$HOME/.cache/meow" ]
 }

@@ -96,20 +96,20 @@ setup() {
     [ "$status" -ne 0 ]
 }
 
-@test "mo clean --whitelist persists selections" {
+@test "meow clean --whitelist persists selections" {
     whitelist_file="$HOME/.config/meow/whitelist"
     mkdir -p "$(dirname "$whitelist_file")"
 
-    run bash --noprofile --norc -c "cd '$PROJECT_ROOT'; printf \$'\\n' | HOME='$HOME' ./mo clean --whitelist"
+    run bash --noprofile --norc -c "cd '$PROJECT_ROOT'; printf \$'\\n' | HOME='$HOME' ./meow clean --whitelist"
     [ "$status" -eq 0 ]
     grep -q "\\.m2/repository" "$whitelist_file"
 
-    run bash --noprofile --norc -c "cd '$PROJECT_ROOT'; printf \$' \\n' | HOME='$HOME' ./mo clean --whitelist"
+    run bash --noprofile --norc -c "cd '$PROJECT_ROOT'; printf \$' \\n' | HOME='$HOME' ./meow clean --whitelist"
     [ "$status" -eq 0 ]
     run grep -q "\\.m2/repository" "$whitelist_file"
     [ "$status" -eq 1 ]
 
-    run bash --noprofile --norc -c "cd '$PROJECT_ROOT'; printf \$'\\n' | HOME='$HOME' ./mo clean --whitelist"
+    run bash --noprofile --norc -c "cd '$PROJECT_ROOT'; printf \$'\\n' | HOME='$HOME' ./meow clean --whitelist"
     [ "$status" -eq 0 ]
     run grep -q "\\.m2/repository" "$whitelist_file"
     [ "$status" -eq 1 ]

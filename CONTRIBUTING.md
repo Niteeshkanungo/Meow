@@ -111,7 +111,7 @@ stop_inline_spinner "Complete"
 Enable debug output with `--debug`:
 
 ```bash
-mo --debug clean
+meow --debug clean
 ./bin/clean.sh --debug
 ```
 
@@ -130,11 +130,11 @@ Format: `[MODULE_NAME] message` output to stderr.
 - macOS 10.14 or newer, works on Intel and Apple Silicon
 - Default macOS Bash 3.2+ plus administrator privileges for cleanup tasks
 - Install Command Line Tools with `xcode-select --install` for curl, tar, and related utilities
-- Go 1.24+ is required to build the `mo status` or `mo analyze` TUI binaries locally.
+- Go 1.24+ is required to build the `meow status` or `meow analyze` TUI binaries locally.
 
 ## Go Components
 
-`mo status` and `mo analyze` use Go with Bubble Tea for interactive dashboards.
+`meow status` and `meow analyze` use Go with Bubble Tea for interactive dashboards.
 
 **Code organization:**
 

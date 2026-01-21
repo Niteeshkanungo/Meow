@@ -5,14 +5,14 @@ import (
 	"strings"
 )
 
-// isCleanableDir marks paths safe to delete manually (not handled by mo clean).
+// isCleanableDir marks paths safe to delete manually (not handled by meow clean).
 func isCleanableDir(path string) bool {
 	if path == "" {
 		return false
 	}
 
-	// Exclude paths mo clean already handles.
-	if isHandledByMoClean(path) {
+	// Exclude paths meow clean already handles.
+	if isHandledByMeowClean(path) {
 		return false
 	}
 
@@ -26,8 +26,8 @@ func isCleanableDir(path string) bool {
 	return false
 }
 
-// isHandledByMoClean checks if a path is cleaned by mo clean.
-func isHandledByMoClean(path string) bool {
+// isHandledByMeowClean checks if a path is cleaned by meow clean.
+func isHandledByMeowClean(path string) bool {
 	cleanPaths := []string{
 		"/Library/Caches/",
 		"/Library/Logs/",

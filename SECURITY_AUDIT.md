@@ -124,7 +124,7 @@ When running with `sudo`:
 
 ### Interactive Analyzer (Go)
 
-The analyzer (`mo analyze`) uses a distinct security model:
+The analyzer (`meow analyze`) uses a distinct security model:
 
 - Runs with standard user permissions only.
 - Respects macOS System Integrity Protection (SIP).
@@ -184,7 +184,7 @@ For user-selected app removal:
 
 **LaunchAgent/LaunchDaemon Cleanup During Uninstallation:**
 
-When users uninstall applications via `mo uninstall`, Meow automatically removes associated LaunchAgent and LaunchDaemon plists:
+When users uninstall applications via `meow uninstall`, Meow automatically removes associated LaunchAgent and LaunchDaemon plists:
 
 - Scans `~/Library/LaunchAgents`, `~/Library/LaunchDaemons`, `/Library/LaunchAgents`, `/Library/LaunchDaemons`
 - Matches both exact bundle ID (`com.example.app.plist`) and app name patterns (`*AppName*.plist`)
@@ -222,7 +222,7 @@ run_with_timeout 5 diskutil info "$mount_point" || skip_volume
 
 ### Dry-Run Mode
 
-**Command:** `mo clean --dry-run` | `mo optimize --dry-run`
+**Command:** `meow clean --dry-run` | `meow optimize --dry-run`
 
 **Behavior:**
 
@@ -303,7 +303,7 @@ bats tests/security.bats # Run specific suite
 | Limitation | Impact | Mitigation |
 |------------|--------|------------|
 | Requires `sudo` for system caches | Initial friction | Clear documentation explaining why |
-| 60-day rule may delay cleanup | Some orphans remain longer | Manual `mo uninstall` is always available |
+| 60-day rule may delay cleanup | Some orphans remain longer | Manual `meow uninstall` is always available |
 | No undo functionality | Deleted files are unrecoverable | Dry-run mode and warnings are clear |
 | English-only name matching | May miss non-English apps | Fallback to Bundle ID matching |
 

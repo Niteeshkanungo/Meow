@@ -43,8 +43,8 @@ if [[ $# -eq 0 ]]; then
     completion_name=""
     if command -v cat > /dev/null 2>&1; then
         completion_name="cat"
-    elif command -v mo > /dev/null 2>&1; then
-        completion_name="mo"
+    elif command -v meow > /dev/null 2>&1; then
+        completion_name="meow"
     fi
 
     case "$current_shell" in
@@ -72,11 +72,11 @@ if [[ $# -eq 0 ]]; then
     esac
 
     if [[ -z "$completion_name" ]]; then
-        if [[ -f "$config_file" ]] && grep -Eq "(^# Meow shell completion$|(cat|mo)[[:space:]]+completion)" "$config_file" 2> /dev/null; then
+        if [[ -f "$config_file" ]] && grep -Eq "(^# Meow shell completion$|(cat|meow)[[:space:]]+completion)" "$config_file" 2> /dev/null; then
             original_mode=""
             original_mode="$(stat -f '%Mp%Lp' "$config_file" 2> /dev/null || true)"
             temp_file="$(mktemp)"
-            grep -Ev "(^# Meow shell completion$|(cat|mo)[[:space:]]+completion)" "$config_file" > "$temp_file" || true
+            grep -Ev "(^# Meow shell completion$|(cat|meow)[[:space:]]+completion)" "$config_file" > "$temp_file" || true
             mv "$temp_file" "$config_file"
             if [[ -n "$original_mode" ]]; then
                 chmod "$original_mode" "$config_file" 2> /dev/null || true
@@ -89,11 +89,11 @@ if [[ $# -eq 0 ]]; then
     fi
 
     # Check if already installed and normalize to latest line
-    if [[ -f "$config_file" ]] && grep -Eq "(cat|mo)[[:space:]]+completion" "$config_file" 2> /dev/null; then
+    if [[ -f "$config_file" ]] && grep -Eq "(cat|meow)[[:space:]]+completion" "$config_file" 2> /dev/null; then
         original_mode=""
         original_mode="$(stat -f '%Mp%Lp' "$config_file" 2> /dev/null || true)"
         temp_file="$(mktemp)"
-        grep -Ev "(^# Meow shell completion$|(cat|mo)[[:space:]]+completion)" "$config_file" > "$temp_file" || true
+        grep -Ev "(^# Meow shell completion$|(cat|meow)[[:space:]]+completion)" "$config_file" > "$temp_file" || true
         mv "$temp_file" "$config_file"
         if [[ -n "$original_mode" ]]; then
             chmod "$original_mode" "$config_file" 2> /dev/null || true
@@ -142,7 +142,7 @@ if [[ $# -eq 0 ]]; then
         original_mode=""
         original_mode="$(stat -f '%Mp%Lp' "$config_file" 2> /dev/null || true)"
         temp_file="$(mktemp)"
-        grep -Ev "(^# Meow shell completion$|(cat|mo)[[:space:]]+completion)" "$config_file" > "$temp_file" || true
+        grep -Ev "(^# Meow shell completion$|(cat|meow)[[:space:]]+completion)" "$config_file" > "$temp_file" || true
         mv "$temp_file" "$config_file"
         if [[ -n "$original_mode" ]]; then
             chmod "$original_mode" "$config_file" 2> /dev/null || true
@@ -187,11 +187,11 @@ _meow_completions()
     fi
 }
 
-complete -F _meow_completions cat mo
+complete -F _meow_completions cat meow
 EOF
         ;;
     zsh)
-        printf '#compdef cat mo\n\n'
+        printf '#compdef cat meow\n\n'
         printf '_meow() {\n'
         printf '    local -a subcommands\n'
         printf '    subcommands=(\n'
@@ -199,13 +199,13 @@ EOF
         printf '    )\n'
         printf "    _describe 'subcommand' subcommands\n"
         printf '}\n\n'
-        printf 'compdef _meow cat mo\n'
+        printf 'compdef _meow cat meow\n'
         ;;
     fish)
         printf '# Completions for cat\n'
         emit_fish_completions cat
-        printf '\n# Completions for mo (alias)\n'
-        emit_fish_completions mo
+        printf '\n# Completions for meow (alias)\n'
+        emit_fish_completions meow
         printf '\nfunction __fish_meow_no_subcommand\n'
         printf '    for i in (commandline -opc)\n'
         # shellcheck disable=SC2016
@@ -223,7 +223,7 @@ EOF
         cat << 'EOF'
 Usage: cat completion [bash|zsh|fish]
 
-Setup shell tab completion for cat and mo commands.
+Setup shell tab completion for cat and meow commands.
 
 Auto-install:
   cat completion              # Auto-detect shell and install

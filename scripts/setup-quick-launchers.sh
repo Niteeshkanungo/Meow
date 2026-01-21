@@ -28,13 +28,13 @@ prompt_enter() {
         echo "$prompt"
     fi
 }
-detect_mo() {
-    if command -v mo > /dev/null 2>&1; then
-        command -v mo
-    elif command -v mole > /dev/null 2>&1; then
-        command -v mole
+detect_meow() {
+    if command -v meow > /dev/null 2>&1; then
+        command -v meow
+    elif command -v cat > /dev/null 2>&1; then
+        command -v cat
     else
-        log_error "Mole not found. Install it first via Homebrew or ./install.sh."
+        log_error "Meow not found. Install it first via Homebrew or ./install.sh."
         exit 1
     fi
 }
@@ -42,9 +42,9 @@ detect_mo() {
 write_raycast_script() {
     local target="$1"
     local title="$2"
-    local mo_bin="$3"
+    local meow_bin="$3"
     local subcommand="$4"
-    local raw_cmd="\"${mo_bin}\" ${subcommand}"
+    local raw_cmd="\"${meow_bin}\" ${subcommand}"
     local cmd_escaped="${raw_cmd//\\/\\\\}"
     cmd_escaped="${cmd_escaped//\"/\\\"}"
     cat > "$target" << EOF
@@ -204,7 +204,7 @@ APPLESCRIPT
 }
 
 if [[ -n "\${TERM:-}" && "\${TERM}" != "dumb" ]]; then
-    "${mo_bin}" ${subcommand}
+    "${meow_bin}" ${subcommand}
     exit \$?
 fi
 
@@ -230,17 +230,17 @@ EOF
 }
 
 create_raycast_commands() {
-    local mo_bin="$1"
+    local meow_bin="$1"
     local default_dir="$HOME/Library/Application Support/Raycast/script-commands"
     local dir="$default_dir"
 
     log_step "Installing Raycast commands..."
     mkdir -p "$dir"
-    write_raycast_script "$dir/mole-clean.sh" "clean" "$mo_bin" "clean"
-    write_raycast_script "$dir/mole-uninstall.sh" "uninstall" "$mo_bin" "uninstall"
-    write_raycast_script "$dir/mole-optimize.sh" "optimize" "$mo_bin" "optimize"
-    write_raycast_script "$dir/mole-analyze.sh" "analyze" "$mo_bin" "analyze"
-    write_raycast_script "$dir/mole-status.sh" "status" "$mo_bin" "status"
+    write_raycast_script "$dir/meow-clean.sh" "clean" "$meow_bin" "clean"
+    write_raycast_script "$dir/meow-uninstall.sh" "uninstall" "$meow_bin" "uninstall"
+    write_raycast_script "$dir/meow-optimize.sh" "optimize" "$meow_bin" "optimize"
+    write_raycast_script "$dir/meow-analyze.sh" "analyze" "$meow_bin" "analyze"
+    write_raycast_script "$dir/meow-status.sh" "status" "$meow_bin" "status"
     log_success "Scripts ready in: $dir"
 
     log_header "Raycast Configuration"
@@ -283,7 +283,7 @@ uuid() {
 }
 
 create_alfred_workflow() {
-    local mo_bin="$1"
+    local meow_bin="$1"
     local prefs_dir="${ALFRED_PREFS_DIR:-$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences}"
     local workflows_dir="$prefs_dir/workflows"
 
@@ -293,11 +293,11 @@ create_alfred_workflow() {
 
     log_step "Installing Alfred workflows..."
     local workflows=(
-        "fun.tw93.mole.clean|Mole clean|clean|Run Mole clean|\"${mo_bin}\" clean"
-        "fun.tw93.mole.uninstall|Mole uninstall|uninstall|Uninstall apps via Mole|\"${mo_bin}\" uninstall"
-        "fun.tw93.mole.optimize|Mole optimize|optimize|System health & optimization|\"${mo_bin}\" optimize"
-        "fun.tw93.mole.analyze|Mole analyze|analyze|Disk space analysis|\"${mo_bin}\" analyze"
-        "fun.tw93.mole.status|Mole status|status|Live system dashboard|\"${mo_bin}\" status"
+        "fun.tw93.meow.clean|Mole clean|clean|Run Mole clean|\"${meow_bin}\" clean"
+        "fun.tw93.meow.uninstall|Mole uninstall|uninstall|Uninstall apps via Mole|\"${meow_bin}\" uninstall"
+        "fun.tw93.meow.optimize|Mole optimize|optimize|System health & optimization|\"${meow_bin}\" optimize"
+        "fun.tw93.meow.analyze|Mole analyze|analyze|Disk space analysis|\"${meow_bin}\" analyze"
+        "fun.tw93.meow.status|Mole status|status|Live system dashboard|\"${meow_bin}\" status"
     )
 
     for entry in "${workflows[@]}"; do
@@ -404,12 +404,12 @@ main() {
     echo "  Mole Quick Launchers"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-    local mo_bin
-    mo_bin="$(detect_mo)"
-    log_step "Detected Mole binary at: ${mo_bin}"
+    local meow_bin
+    meow_bin="$(detect_meow)"
+    log_step "Detected Mole binary at: ${meow_bin}"
 
-    create_raycast_commands "$mo_bin"
-    create_alfred_workflow "$mo_bin"
+    create_raycast_commands "$meow_bin"
+    create_alfred_workflow "$meow_bin"
 
     echo ""
     log_success "Done! Raycast and Alfred are ready with 5 commands:"

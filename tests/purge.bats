@@ -527,18 +527,18 @@ EOF
     [[ "$output" =~ "Great" ]]
 }
 
-@test "mo purge: command exists and is executable" {
+@test "meow purge: command exists and is executable" {
     [ -x "$PROJECT_ROOT/mole" ]
     [ -f "$PROJECT_ROOT/bin/purge.sh" ]
 }
 
-@test "mo purge: shows in help text" {
+@test "meow purge: shows in help text" {
     run env HOME="$HOME" "$PROJECT_ROOT/mole" --help
     [ "$status" -eq 0 ]
-    [[ "$output" == *"mo purge"* ]]
+    [[ "$output" == *"meow purge"* ]]
 }
 
-@test "mo purge: accepts --debug flag" {
+@test "meow purge: accepts --debug flag" {
     if ! command -v gtimeout >/dev/null 2>&1 && ! command -v timeout >/dev/null 2>&1; then
         skip "gtimeout/timeout not available"
     fi
@@ -553,7 +553,7 @@ EOF
     true
 }
 
-@test "mo purge: creates cache directory for stats" {
+@test "meow purge: creates cache directory for stats" {
     if ! command -v gtimeout >/dev/null 2>&1 && ! command -v timeout >/dev/null 2>&1; then
         skip "gtimeout/timeout not available"
     fi
