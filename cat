@@ -99,7 +99,7 @@ check_for_updates() {
             fi
 
             if [[ -n "$latest" && "$VERSION" != "$latest" && "$(printf '%s\n' "$VERSION" "$latest" | sort -V | head -1)" == "$VERSION" ]]; then
-                printf "\nUpdate available: %s → %s, run %smo update%s\n\n" "$VERSION" "$latest" "$GREEN" "$NC" > "$msg_cache"
+                printf "\nUpdate available: %s → %s, run %smeow update%s\n\n" "$VERSION" "$latest" "$GREEN" "$NC" > "$msg_cache"
             else
                 echo -n > "$msg_cache"
             fi
@@ -118,11 +118,11 @@ show_update_notification() {
 # UI helpers
 show_brand_banner() {
     cat << EOF
-${GREEN} __  __       _      ${NC}
-${GREEN}|  \/  | ___ | | ___ ${NC}
-${GREEN}| |\/| |/ _ \| |/ _ \\${NC}
-${GREEN}| |  | | (_) | |  __/${NC}  ${BLUE}https://github.com/tw93/meow${NC}
-${GREEN}|_|  |_|\___/|_|\___|${NC}  ${GREEN}${MEOW_TAGLINE}${NC}
+${GREEN} __  __       _      _    _ ${NC}
+${GREEN}|  \/  | ___ | | ___| |  | |${NC}
+${GREEN}| |\/| |/ _ \| |/ _ \ |/\| |${NC}
+${GREEN}| |  | | (_) | |  __/\  /\  /${NC}  ${BLUE}https://github.com/tw93/meow${NC}
+${GREEN}|_|  |_|\___/|_|\___| \/\/ ${NC}  ${GREEN}${MEOW_TAGLINE}${NC}
 
 EOF
 }

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Mole - Status command.
+# Meow - Status command.
 # Runs the Go system status panel.
 # Shows live system metrics.
 

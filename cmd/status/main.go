@@ -46,7 +46,7 @@ func getConfigPath() string {
 	if err != nil {
 		return ""
 	}
-	return filepath.Join(home, ".config", "mole", "status_prefs")
+	return filepath.Join(home, ".config", "meow", "status_prefs")
 }
 
 // loadCatHidden loads the cat hidden preference from config file.

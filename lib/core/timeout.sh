@@ -1,5 +1,5 @@
 #!/bin/bash
-# Mole - Timeout Control
+# Meow - Timeout Control
 # Command execution with timeout support
 
 set -euo pipefail

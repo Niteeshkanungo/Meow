@@ -1,5 +1,5 @@
 #!/bin/bash
-# Mole - UI Components
+# Meow - UI Components
 # Terminal UI utilities: cursor control, keyboard input, spinners, menus
 
 set -euo pipefail
@@ -293,7 +293,7 @@ start_inline_spinner() {
 
     if [[ -t 1 ]]; then
         # Create unique stop flag file for this spinner instance
-        INLINE_SPINNER_STOP_FILE="${TMPDIR:-/tmp}/mole_spinner_$$_$RANDOM.stop"
+        INLINE_SPINNER_STOP_FILE="${TMPDIR:-/tmp}/meow_spinner_$$_$RANDOM.stop"
 
         (
             local stop_file="$INLINE_SPINNER_STOP_FILE"

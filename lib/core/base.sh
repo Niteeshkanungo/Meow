@@ -1,5 +1,5 @@
 #!/bin/bash
-# Mole - Base Definitions and Utilities
+# Meow - Base Definitions and Utilities
 # Core definitions, constants, and basic utility functions used by all modules
 
 set -euo pipefail
@@ -546,7 +546,7 @@ register_temp_dir() {
 # Create temp file with prefix (for analyze.sh compatibility)
 # Compatible with both BSD mktemp (macOS default) and GNU mktemp (coreutils)
 mktemp_file() {
-    local prefix="${1:-mole}"
+    local prefix="${1:-meow}"
     local temp
     local error_msg
     # Use TMPDIR if set, otherwise /tmp

@@ -1,4 +1,4 @@
-# Makefile for Mole
+# Makefile for Meow
 
 .PHONY: all build clean release
 

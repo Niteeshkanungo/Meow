@@ -32,66 +32,58 @@ const (
 	iconProcs   = "❊"
 )
 
-// Mole body frames (facing right).
-var moleBody = [][]string{
+// Cat body frames (facing right).
+var catBody = [][]string{
 	{
-		`     /\_/\`,
-		` ___/ o o \`,
-		`/___   =-= /`,
-		`\____)-m-m)`,
+		`  /\_/\  `,
+		` ( o.o ) `,
+		`  > ^ <  `,
 	},
 	{
-		`     /\_/\`,
-		` ___/ o o \`,
-		`/___   =-= /`,
-		`\____)mm__)`,
+		`  /\_/\  `,
+		` ( o.o ) `,
+		`  > ^ <  `,
 	},
 	{
-		`     /\_/\`,
-		` ___/ · · \`,
-		`/___   =-= /`,
-		`\___)-m__m)`,
+		`  /\_/\  `,
+		` ( ·.· ) `,
+		`  > ^ <  `,
 	},
 	{
-		`     /\_/\`,
-		` ___/ o o \`,
-		`/___   =-= /`,
-		`\____)-mm-)`,
+		`  /\_/\  `,
+		` ( o.o ) `,
+		`  > ^ <  `,
 	},
 }
 
-// Mirror mole body frames (facing left).
-var moleBodyMirror = [][]string{
+// Mirror cat body frames (facing left).
+var catBodyMirror = [][]string{
 	{
-		`    /\_/\`,
-		`   / o o \___`,
-		`  \ =-=   ___\`,
-		`  (m-m-(____/`,
+		`  /\_/\  `,
+		` ( o.o ) `,
+		`  < ^ >  `,
 	},
 	{
-		`    /\_/\`,
-		`   / o o \___`,
-		`  \ =-=   ___\`,
-		`  (__mm(____/`,
+		`  /\_/\  `,
+		` ( o.o ) `,
+		`  < ^ >  `,
 	},
 	{
-		`    /\_/\`,
-		`   / · · \___`,
-		`  \ =-=   ___\`,
-		`  (m__m-(___/`,
+		`  /\_/\  `,
+		` ( ·.· ) `,
+		`  < ^ >  `,
 	},
 	{
-		`    /\_/\`,
-		`   / o o \___`,
-		`  \ =-=   ___\`,
-		`  (-mm-(____/`,
+		`  /\_/\  `,
+		` ( o.o ) `,
+		`  < ^ >  `,
 	},
 }
 
-// getMoleFrame renders the animated mole.
-func getMoleFrame(animFrame int, termWidth int) string {
-	moleWidth := 15
-	maxPos := max(termWidth-moleWidth, 0)
+// getCatFrame renders the animated cat.
+func getCatFrame(animFrame int, termWidth int) string {
+	catWidth := 10
+	maxPos := max(termWidth-catWidth, 0)
 
 	cycleLength := maxPos * 2
 	if cycleLength == 0 {
@@ -106,9 +98,9 @@ func getMoleFrame(animFrame int, termWidth int) string {
 	// Use mirror frames when moving left
 	var frames [][]string
 	if movingLeft {
-		frames = moleBodyMirror
+		frames = catBodyMirror
 	} else {
-		frames = moleBody
+		frames = catBody
 	}
 
 	bodyIdx := animFrame % len(frames)
@@ -172,21 +164,21 @@ func renderHeader(m MetricsSnapshot, errMsg string, animFrame int, termWidth int
 	headerLine := title + "  " + scoreText + "  " + strings.Join(infoParts, " · ")
 
 	// Show cat unless hidden
-	var mole string
+	var cat string
 	if !catHidden {
-		mole = getMoleFrame(animFrame, termWidth)
+		cat = getCatFrame(animFrame, termWidth)
 	}
 
 	if errMsg != "" {
-		if mole == "" {
+		if cat == "" {
 			return lipgloss.JoinVertical(lipgloss.Left, headerLine, "", dangerStyle.Render("ERROR: "+errMsg), "")
 		}
-		return lipgloss.JoinVertical(lipgloss.Left, headerLine, "", mole, dangerStyle.Render("ERROR: "+errMsg), "")
+		return lipgloss.JoinVertical(lipgloss.Left, headerLine, "", cat, dangerStyle.Render("ERROR: "+errMsg), "")
 	}
-	if mole == "" {
+	if cat == "" {
 		return headerLine
 	}
-	return headerLine + "\n" + mole
+	return headerLine + "\n" + cat
 }
 
 func getScoreStyle(score int) lipgloss.Style {
@@ -217,6 +209,13 @@ func renderCPUCard(cpu CPUStatus, thermal ThermalStatus) cardData {
 
 	lines = append(lines, fmt.Sprintf("Total  %s  %s", usageBar, headerText))
 
+	// Show CPU architecture info
+	if cpu.PCoreCount > 0 && cpu.ECoreCount > 0 {
+		lines = append(lines, subtleStyle.Render(fmt.Sprintf("Arch   %d Performance + %d Efficiency cores", cpu.PCoreCount, cpu.ECoreCount)))
+	} else if cpu.CoreCount > 0 {
+		lines = append(lines, subtleStyle.Render(fmt.Sprintf("Cores  %d physical, %d logical", cpu.CoreCount, cpu.LogicalCPU)))
+	}
+
 	if cpu.PerCoreEstimated {
 		lines = append(lines, subtleStyle.Render("Per-core data unavailable (using averaged load)"))
 	} else if len(cpu.PerCore) > 0 {
@@ -228,12 +227,32 @@ func renderCPUCard(cpu CPUStatus, thermal ThermalStatus) cardData {
 		for i, v := range cpu.PerCore {
 			cores = append(cores, coreUsage{i, v})
 		}
+
+		// Determine core type for Apple Silicon
+		isAppleSilicon := cpu.PCoreCount > 0 && cpu.ECoreCount > 0
+		var eCoreStart int
+		if isAppleSilicon {
+			// Typically P cores come first, then E cores
+			eCoreStart = cpu.PCoreCount
+		}
+
+		// Show all cores, sorted by usage (descending)
 		sort.Slice(cores, func(i, j int) bool { return cores[i].val > cores[j].val })
 
-		maxCores := min(len(cores), 3)
-		for i := 0; i < maxCores; i++ {
-			c := cores[i]
-			lines = append(lines, fmt.Sprintf("Core%-2d %s  %5.1f%%", c.idx+1, progressBar(c.val), c.val))
+		// Display all cores
+		for _, c := range cores {
+			coreLabel := fmt.Sprintf("Core%-2d", c.idx+1)
+
+			// Add P/E indicator for Apple Silicon
+			if isAppleSilicon {
+				if c.idx < eCoreStart {
+					coreLabel = fmt.Sprintf("P%-2d", c.idx+1)
+				} else {
+					coreLabel = fmt.Sprintf("E%-2d", c.idx-eCoreStart+1)
+				}
+			}
+
+			lines = append(lines, fmt.Sprintf("%-6s %s  %5.1f%%", coreLabel, progressBar(c.val), c.val))
 		}
 	}
 

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Mole - Common Functions Library
+# Meow - Common Functions Library
 # Main entry point that loads all core modules
 
 set -euo pipefail
@@ -51,14 +51,14 @@ update_via_homebrew() {
         stop_inline_spinner
     fi
 
-    # Upgrade Mole
+    # Upgrade Meow
     if [[ -t 1 ]]; then
-        start_inline_spinner "Upgrading Mole..."
+        start_inline_spinner "Upgrading Meow..."
     else
-        echo "Upgrading Mole..."
+        echo "Upgrading Meow..."
     fi
 
-    brew upgrade mole > "$temp_upgrade" 2>&1 &
+    brew upgrade meow > "$temp_upgrade" 2>&1 &
     local upgrade_pid=$!
     wait $upgrade_pid 2> /dev/null || true # Continue even if brew upgrade fails
 
@@ -78,7 +78,7 @@ update_via_homebrew() {
 
     if echo "$upgrade_output" | grep -q "already installed"; then
         local installed_version
-        installed_version=$(brew list --versions mole 2> /dev/null | awk '{print $2}')
+        installed_version=$(brew list --versions meow 2> /dev/null | awk '{print $2}')
         echo ""
         echo -e "${GREEN}${ICON_SUCCESS}${NC} Already on latest version (${installed_version:-$current_version})"
         echo ""
@@ -89,7 +89,7 @@ update_via_homebrew() {
     else
         echo "$upgrade_output" | grep -Ev "^(==>|Updating Homebrew|Warning:)" || true
         local new_version
-        new_version=$(brew list --versions mole 2> /dev/null | awk '{print $2}')
+        new_version=$(brew list --versions meow 2> /dev/null | awk '{print $2}')
         echo ""
         echo -e "${GREEN}${ICON_SUCCESS}${NC} Updated to latest version (${new_version:-$current_version})"
         echo ""

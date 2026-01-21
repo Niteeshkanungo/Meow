@@ -1,5 +1,5 @@
 #!/bin/bash
-# Mole - Application Protection
+# Meow - Application Protection
 # System critical and data-protected application lists
 
 set -euo pipefail

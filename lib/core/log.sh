@@ -1,5 +1,5 @@
 #!/bin/bash
-# Mole - Logging System
+# Meow - Logging System
 # Centralized logging with rotation support
 
 set -euo pipefail
@@ -21,8 +21,8 @@ fi
 # Logging Configuration
 # ============================================================================
 
-readonly LOG_FILE="${HOME}/.config/meow/mole.log"
-readonly DEBUG_LOG_FILE="${HOME}/.config/meow/mole_debug_session.log"
+readonly LOG_FILE="${HOME}/.config/meow/meow.log"
+readonly DEBUG_LOG_FILE="${HOME}/.config/meow/meow_debug_session.log"
 readonly LOG_MAX_SIZE_DEFAULT=1048576 # 1MB
 
 # Ensure log directory and file exist with correct ownership
@@ -185,7 +185,7 @@ log_system_info() {
     # Start block in debug log file
     {
         echo "----------------------------------------------------------------------"
-        echo "Mole Debug Session - $(date '+%Y-%m-%d %H:%M:%S')"
+        echo "Meow Debug Session - $(date '+%Y-%m-%d %H:%M:%S')"
         echo "----------------------------------------------------------------------"
         echo "User: $USER"
         echo "Hostname: $(hostname)"
