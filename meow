@@ -3,5 +3,13 @@
 
 set -euo pipefail
 
+# Resolve symlinks to find the actual project directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ -L "${BASH_SOURCE[0]}" ]]; then
+    # If this script is a symlink, resolve it to find the real directory
+    REAL_PATH="$(readlink -f "${BASH_SOURCE[0]}" 2>/dev/null || readlink "${BASH_SOURCE[0]}")"
+    if [[ -n "$REAL_PATH" ]]; then
+        SCRIPT_DIR="$(cd "$(dirname "$REAL_PATH")" && pwd)"
+    fi
+fi
 exec "$SCRIPT_DIR/cat" "$@"

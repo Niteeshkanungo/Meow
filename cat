@@ -5,7 +5,15 @@
 
 set -euo pipefail
 
+# Resolve symlinks to find the actual project directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ -L "${BASH_SOURCE[0]}" ]]; then
+    # If this script is a symlink, resolve it to find the real directory
+    REAL_PATH="$(readlink -f "${BASH_SOURCE[0]}" 2>/dev/null || readlink "${BASH_SOURCE[0]}")"
+    if [[ -n "$REAL_PATH" ]]; then
+        SCRIPT_DIR="$(cd "$(dirname "$REAL_PATH")" && pwd)"
+    fi
+fi
 
 source "$SCRIPT_DIR/lib/core/common.sh"
 source "$SCRIPT_DIR/lib/core/commands.sh"
@@ -133,13 +141,13 @@ animate_cat_intro() {
     while IFS= read -r line; do
         cat_lines+=("$line")
     done << 'EOF'
-        /\_/\
-   ____/ o o \
- /~____  =o= /
-(______)__m_m)
-        /   \
-     __/ /\ \__
-    /__/  \__\_
+     /\_/\  
+    ( o.o ) 
+     > ^ <
+    /     \
+   (       )
+  ( (  )  ) )
+ (__(__)__)__)
 EOF
 
     local idx
